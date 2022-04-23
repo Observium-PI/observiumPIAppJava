@@ -173,7 +173,7 @@ public class TelaFuncMaq extends javax.swing.JFrame {
                 Maquina maquina = new Maquina(hostName, endMac, fabricante, 
                         arquitetura, sistemaOperacional, fkHospital);
                 
-                computador.incluir(maquina);
+                computador.incluir(maquina); //INCLUIR NO BANCO
                 
                 //========================COMPONENTES===========================
                 
@@ -192,12 +192,12 @@ public class TelaFuncMaq extends javax.swing.JFrame {
                 
                 //INSERINDO CPU
                 Componente cpu = new Componente(haveCpu, idComputadores);
-                componentes.incluirComponente(cpu);
+                componentes.incluirComponente(cpu); //INCLUIR NO BANCO
                 
                 //INSERINDO MEMÓRIA
                 if (haveMemoria != null) {
                     Componente memoria = new Componente(haveMemoria, idComputadores);
-                    componentes.incluirComponente(memoria);
+                    componentes.incluirComponente(memoria); //INCLUIR NO BANCO
                 } else {
                     System.out.println("Sem memória");
                 }
@@ -207,7 +207,7 @@ public class TelaFuncMaq extends javax.swing.JFrame {
 
                 for (int i = 0; i < haveDisco; i++) {
                     Componente disco = new Componente("disco " + (i + 1), idComputadores);
-                    componentes.incluirComponente(disco);
+                    componentes.incluirComponente(disco); //INCLUIR NO BANCO
                 }
 
                 labelMostrarErro.setForeground(Color.green);

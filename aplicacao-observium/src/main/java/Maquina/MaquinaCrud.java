@@ -13,7 +13,6 @@ import java.util.List;
 public class MaquinaCrud {
     private JdbcTemplate jdbcTemplate;
     Looca looca = new Looca();
-    Sistema sistema = looca.getSistema();
     
     public MaquinaCrud(BasicDataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -66,19 +65,19 @@ public class MaquinaCrud {
     }
     
     public String buscarFabricante() {
-        String fabricante = sistema.getFabricante();
+        String fabricante = looca.getSistema().getFabricante();
         
         return fabricante;
     }
     
     public Integer buscarArquitetura() {
-        Integer arquitetura = sistema.getArquitetura();
+        Integer arquitetura = looca.getSistema().getArquitetura();
         
         return arquitetura;
     }
     
     public String buscarSO() {
-        String sistemaOperacional = sistema.getSistemaOperacional();
+        String sistemaOperacional = looca.getSistema().getSistemaOperacional();
         
         return sistemaOperacional;
     }

@@ -17,20 +17,26 @@ public class Memory {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
     
-    public Long memoriaTotal() {
-        Long memoriaTotal = memoriaDisponivel() + memoriaEmUso();
+    public Double memoriaTotal() {
+        Long memoria = looca.getMemoria().getTotal();
+        String memoriaString = String.valueOf(memoria);
+        Double memoriaTotal = Double.valueOf(memoriaString);
         
         return memoriaTotal;
     }
     
-    public Long memoriaEmUso() {
-        Long memoriaEmUso = looca.getMemoria().getEmUso();
+    public Double memoriaEmUso() {
+        Long memoria = looca.getMemoria().getEmUso();
+        String memoriaString = String.valueOf(memoria);
+        Double memoriaEmUso = Double.valueOf(memoriaString);
         
         return memoriaEmUso;
     }
     
-    public Long memoriaDisponivel() {
-        Long memoriaDisponivel = looca.getMemoria().getDisponivel();
+    public Double memoriaDisponivel() {
+        Long memoria = looca.getMemoria().getDisponivel();
+        String memoriaString = String.valueOf(memoria);
+        Double memoriaDisponivel = Double.valueOf(memoriaString);
         
         return memoriaDisponivel;
     }

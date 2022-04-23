@@ -4,7 +4,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class Maquina {
-    
     private JdbcTemplate jdbcTemplate;
     
     public Maquina(BasicDataSource dataSource) {
