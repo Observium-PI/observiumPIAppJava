@@ -15,7 +15,7 @@ public class UsuarioCrud {
     ConexaoBancoLocal conexao = new ConexaoBancoLocal();
     
     public UsuarioCrud(BasicDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = conexao.getConexao();
     }
 
     public UsuarioCrud(String usuario) {

@@ -10,11 +10,6 @@ public class TesteMaquina {
     public static void main(String[] args) throws UnknownHostException, SocketException {
         BasicDataSource dataSource = new BasicDataSource();
         
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("Dan-auto85");
-        
         MaquinaCrud Computador = new MaquinaCrud(dataSource);
         UsuarioCrud Usuario = new UsuarioCrud(dataSource);
         

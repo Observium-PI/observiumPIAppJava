@@ -14,6 +14,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.awt.Color;
 import org.springframework.dao.DuplicateKeyException;
+import BancoDeDados.ConexaoBancoLocal;
 
 /**
  *
@@ -21,13 +22,10 @@ import org.springframework.dao.DuplicateKeyException;
  */
 public class TelaFuncMaq extends javax.swing.JFrame {
 
-    private JdbcTemplate jdbcTemplate;
     public String login;
     public String nome;
-
-    public TelaFuncMaq(BasicDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
+    
+    BasicDataSource dataSource = new BasicDataSource();
 
     /**
      * Creates new form TelaFuncMaq
@@ -40,13 +38,6 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     public TelaFuncMaq(UsuarioCrud usuario) {
         initComponents();
         setLocationRelativeTo(this);
-
-        BasicDataSource dataSource = new BasicDataSource();
-
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("Dan-auto85");
 
         login = usuario.getLoginUsuario();
         nome = usuario.getUsuario();
@@ -145,14 +136,16 @@ public class TelaFuncMaq extends javax.swing.JFrame {
 
     private void bttIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttIniciarActionPerformed
         try {
-            BasicDataSource dataSource = new BasicDataSource();
+            
             UsuarioCrud usuario = new UsuarioCrud(dataSource);
 
             //CONFIGURAÇÕES DO BANCO
-            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
-            dataSource.setUsername("root");
-            dataSource.setPassword("Dan-auto85");
+//            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//            dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
+//            dataSource.setUsername("root");
+//            dataSource.setPassword("Dan-auto85");
+
+
 
             //==========================COMPUTADOR==============================
             //INSTANCIANDO A CLASSE MAQUINA CRUD

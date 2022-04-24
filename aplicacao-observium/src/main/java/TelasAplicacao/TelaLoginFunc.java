@@ -2,16 +2,9 @@ package TelasAplicacao;
 
 import Usuarios.UsuarioCrud;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import BancoDeDados.ConexaoBancoLocal;
 import TelasAplicacao.TelaFuncMaq;
 
 public class TelaLoginFunc extends javax.swing.JFrame {
-    private JdbcTemplate jdbcTemplate;
-    
-    public TelaLoginFunc(BasicDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
     
     /**
      * Creates new form TelaLoginFunc
@@ -40,6 +33,7 @@ public class TelaLoginFunc extends javax.swing.JFrame {
         background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(610, 490));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         bttLogin.setBackground(new java.awt.Color(0, 0, 0));
@@ -93,11 +87,6 @@ public class TelaLoginFunc extends javax.swing.JFrame {
        
     private void bttLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttLoginActionPerformed
         BasicDataSource dataSource = new BasicDataSource();
-        
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("Dan-auto85");
 
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
         

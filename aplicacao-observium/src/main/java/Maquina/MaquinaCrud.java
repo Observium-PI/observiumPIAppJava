@@ -9,13 +9,15 @@ import java.net.UnknownHostException;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
+import BancoDeDados.ConexaoBancoLocal;
 
 public class MaquinaCrud {
     private JdbcTemplate jdbcTemplate;
     Looca looca = new Looca();
+    ConexaoBancoLocal conexao = new ConexaoBancoLocal();
     
     public MaquinaCrud(BasicDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = conexao.getConexao();
     }
     
     //METODO PARA INCLUIR APENAS UMA MAQUINA

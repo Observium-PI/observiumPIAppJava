@@ -13,7 +13,7 @@ public class MonitoramentoCrud {
     ConexaoBancoLocal conexao = new ConexaoBancoLocal();
     
     public MonitoramentoCrud(BasicDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = conexao.getConexao();
     }
     
     public void incluirMonitoramento(Monitoramento novoMonitoramento) {

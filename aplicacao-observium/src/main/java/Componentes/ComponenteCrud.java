@@ -20,7 +20,7 @@ public class ComponenteCrud {
     ConexaoBancoLocal conexao = new ConexaoBancoLocal();
     
     public ComponenteCrud(BasicDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = conexao.getConexao();
     }
     
     public void incluirComponente(Componente novoComponente) {
