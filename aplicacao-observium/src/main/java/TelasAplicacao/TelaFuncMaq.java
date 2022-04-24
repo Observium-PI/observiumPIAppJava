@@ -20,14 +20,15 @@ import org.springframework.dao.DuplicateKeyException;
  * @author fabio.gdesouza
  */
 public class TelaFuncMaq extends javax.swing.JFrame {
+
     private JdbcTemplate jdbcTemplate;
     public String login;
     public String nome;
-    
+
     public TelaFuncMaq(BasicDataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    
+
     /**
      * Creates new form TelaFuncMaq
      */
@@ -35,24 +36,24 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
     }
-    
+
     public TelaFuncMaq(UsuarioCrud usuario) {
         initComponents();
         setLocationRelativeTo(this);
-        
+
         BasicDataSource dataSource = new BasicDataSource();
-        
+
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
         dataSource.setUsername("root");
         dataSource.setPassword("Dan-auto85");
-        
+
         login = usuario.getLoginUsuario();
         nome = usuario.getUsuario();
         String texto = "Bem vindo(a) " + nome + "!";
         labelNomeUsuario.setText(texto);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,6 +113,11 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         bttCadastrar.setBackground(new java.awt.Color(0, 0, 0));
         bttCadastrar.setForeground(new java.awt.Color(255, 255, 255));
         bttCadastrar.setText("Start");
+        bttCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttCadastrarActionPerformed(evt);
+            }
+        });
         jPanel1.add(bttCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 250, 40));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
@@ -136,49 +142,47 @@ public class TelaFuncMaq extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-        
+
     private void bttIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttIniciarActionPerformed
         try {
             BasicDataSource dataSource = new BasicDataSource();
             UsuarioCrud usuario = new UsuarioCrud(dataSource);
-            
+
             //CONFIGURAÇÕES DO BANCO
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
             dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
             dataSource.setUsername("root");
             dataSource.setPassword("Dan-auto85");
-            
+
             //==========================COMPUTADOR==============================
-            
             //INSTANCIANDO A CLASSE MAQUINA CRUD
             MaquinaCrud computador = new MaquinaCrud(dataSource);
-            
+
             //OBTENDO INFORMAÇÕES DO COMPUTADOR E GUARDANDO EM VARIAVEIS
             String hostName = computador.buscarHostName();
             String endMac = computador.buscarEndMac();
             String fabricante = computador.buscarFabricante();
             Integer arquitetura = computador.buscarArquitetura();
             String sistemaOperacional = computador.buscarSO();
-            
+
             //BUSCANDO O ID DO HOSPITAL DO USUÁRIO LOGADO PARA CADASTRAR A MÁQUINA
             List idHosp = usuario.buscarIdHospital(login);
             String idHospital = String.valueOf(idHosp);
             idHospital = idHospital.replace("[{fkHospital=", "");
             idHospital = idHospital.replace("}]", "");
-            
+
             Integer fkHospital = Integer.valueOf(idHospital);
-            
+
             try {
                 //INSERINDO COMPUTADOR NO BANCO COM AS INFORMAÇÕES OBTIDAS
-                Maquina maquina = new Maquina(hostName, endMac, fabricante, 
+                Maquina maquina = new Maquina(hostName, endMac, fabricante,
                         arquitetura, sistemaOperacional, fkHospital);
-                
+
                 computador.incluir(maquina); //INCLUIR NO BANCO
-                
+
                 //========================COMPONENTES===========================
-                
                 ComponenteCrud componentes = new ComponenteCrud(dataSource);
-                
+
                 //BUSCANDO ID DO COMPUTADOR CADASTRADO
                 List idPc = componentes.buscarIdComputador(hostName);
                 String idMaquina = String.valueOf(idPc);
@@ -189,11 +193,11 @@ public class TelaFuncMaq extends javax.swing.JFrame {
 
                 String haveCpu = componentes.buscarCpuComponente();
                 String haveMemoria = componentes.buscarMemoriaComponente();
-                
+
                 //INSERINDO CPU
                 Componente cpu = new Componente(haveCpu, idComputadores);
                 componentes.incluirComponente(cpu); //INCLUIR NO BANCO
-                
+
                 //INSERINDO MEMÓRIA
                 if (haveMemoria != null) {
                     Componente memoria = new Componente(haveMemoria, idComputadores);
@@ -212,19 +216,24 @@ public class TelaFuncMaq extends javax.swing.JFrame {
 
                 labelMostrarErro.setForeground(Color.green);
                 labelMostrarErro.setText("Máquina cadastrada com sucesso!");
-            }
-            catch (org.springframework.dao.DuplicateKeyException exception) {
+            } catch (org.springframework.dao.DuplicateKeyException exception) {
                 labelMostrarErro.setForeground(Color.red);
                 labelMostrarErro.setText("Máquina já cadastrada.");
             }
-            
+
         } catch (UnknownHostException ex) {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SocketException ex) {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_bttIniciarActionPerformed
+
+    private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
+        TelaCaptura registro = new TelaCaptura();
+        this.dispose();
+        registro.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_bttCadastrarActionPerformed
 
     /**
      * @param args the command line arguments
