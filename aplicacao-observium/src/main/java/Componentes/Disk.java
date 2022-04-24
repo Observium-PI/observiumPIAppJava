@@ -2,7 +2,6 @@ package Componentes;
 
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.DiscosGroup;
-import com.github.britooo.looca.api.group.discos.Disco;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.dbcp2.BasicDataSource;

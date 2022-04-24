@@ -58,9 +58,11 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         labelMostrarErro = new javax.swing.JLabel();
         labelNomeUsuario = new javax.swing.JLabel();
         labelIniciar = new javax.swing.JLabel();
-        bttIniciar = new javax.swing.JButton();
-        labelCadastrar = new javax.swing.JLabel();
+        bttListar = new javax.swing.JButton();
         bttCadastrar = new javax.swing.JButton();
+        labelHardware = new javax.swing.JLabel();
+        labelCadastrar = new javax.swing.JLabel();
+        bttStart = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         background = new javax.swing.JLabel();
 
@@ -85,31 +87,47 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         labelIniciar.setText("Iniciar Aplicação Java:");
         jPanel1.add(labelIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 250, 50));
 
-        bttIniciar.setBackground(new java.awt.Color(0, 0, 0));
-        bttIniciar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bttIniciar.setForeground(new java.awt.Color(255, 255, 255));
-        bttIniciar.setText("Cadastrar");
-        bttIniciar.addActionListener(new java.awt.event.ActionListener() {
+        bttListar.setBackground(new java.awt.Color(0, 0, 0));
+        bttListar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bttListar.setForeground(new java.awt.Color(255, 255, 255));
+        bttListar.setText("Hardware");
+        bttListar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttIniciarActionPerformed(evt);
+                bttListarActionPerformed(evt);
             }
         });
-        jPanel1.add(bttIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 360, 250, 40));
-
-        labelCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelCadastrar.setForeground(new java.awt.Color(255, 255, 255));
-        labelCadastrar.setText("Cadastrar Máquina:");
-        jPanel1.add(labelCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 250, 50));
+        jPanel1.add(bttListar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 120, 40));
 
         bttCadastrar.setBackground(new java.awt.Color(0, 0, 0));
+        bttCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bttCadastrar.setForeground(new java.awt.Color(255, 255, 255));
-        bttCadastrar.setText("Start");
+        bttCadastrar.setText("Cadastrar");
         bttCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bttCadastrarActionPerformed(evt);
             }
         });
-        jPanel1.add(bttCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 250, 40));
+        jPanel1.add(bttCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 360, 120, 40));
+
+        labelHardware.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        labelHardware.setForeground(new java.awt.Color(255, 255, 255));
+        labelHardware.setText("Listar Hardware:");
+        jPanel1.add(labelHardware, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 310, 120, 50));
+
+        labelCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        labelCadastrar.setForeground(new java.awt.Color(255, 255, 255));
+        labelCadastrar.setText("Cadastrar Máquina:");
+        jPanel1.add(labelCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 120, 50));
+
+        bttStart.setBackground(new java.awt.Color(0, 0, 0));
+        bttStart.setForeground(new java.awt.Color(255, 255, 255));
+        bttStart.setText("Start");
+        bttStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttStartActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bttStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 250, 40));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
@@ -134,18 +152,9 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bttIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttIniciarActionPerformed
+    private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
         try {
-            
             UsuarioCrud usuario = new UsuarioCrud(dataSource);
-
-            //CONFIGURAÇÕES DO BANCO
-//            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//            dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
-//            dataSource.setUsername("root");
-//            dataSource.setPassword("Dan-auto85");
-
-
 
             //==========================COMPUTADOR==============================
             //INSTANCIANDO A CLASSE MAQUINA CRUD
@@ -220,13 +229,25 @@ public class TelaFuncMaq extends javax.swing.JFrame {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_bttIniciarActionPerformed
+    }//GEN-LAST:event_bttCadastrarActionPerformed
 
-    private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
+    private void bttStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStartActionPerformed
         TelaCaptura registro = new TelaCaptura();
         this.dispose();
         registro.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_bttCadastrarActionPerformed
+    }//GEN-LAST:event_bttStartActionPerformed
+
+    private void bttListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttListarActionPerformed
+        try {
+            TelaHardware hardware = new TelaHardware();
+            this.dispose();
+            hardware.setVisible(true);
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SocketException ex) {
+            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bttListarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,10 +287,12 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel background;
     private javax.swing.JButton bttCadastrar;
-    private javax.swing.JButton bttIniciar;
+    private javax.swing.JButton bttListar;
+    private javax.swing.JButton bttStart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelCadastrar;
+    private javax.swing.JLabel labelHardware;
     private javax.swing.JLabel labelIniciar;
     private javax.swing.JLabel labelMostrarErro;
     private javax.swing.JLabel labelNomeUsuario;
