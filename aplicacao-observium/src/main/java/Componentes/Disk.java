@@ -13,7 +13,6 @@ import oshi.hardware.HardwareAbstractionLayer;
 public class Disk {
     private JdbcTemplate jdbcTemplate;
     Looca looca = new Looca();
-    DiscosGroup grupoDisco = new DiscosGroup();
     HardwareAbstractionLayer hardware = new SystemInfo().getHardware();
     
     public Disk(BasicDataSource dataSource) {
@@ -21,54 +20,69 @@ public class Disk {
     }
     
     public Integer qtdDiscos() {
-        DiscosGroup grupoDeDiscos = looca.getGrupoDeDiscos();
-        Integer qtdDiscos = grupoDeDiscos.getQuantidadeDeDiscos();
+        Integer qtdDiscos = looca.getGrupoDeDiscos().getQuantidadeDeDiscos();
         
         return qtdDiscos;
     }
     
-    public Object totalDisco(Integer disco) {
-        DiscosGroup grupoDeDiscos = looca.getGrupoDeDiscos();
-        List<List> parametrosDiscos = new ArrayList<>();
-        List<Object> totalDiscos = new ArrayList<>();
+    public Integer qtdVolumes() {
+        Integer qtdVolumes = looca.getGrupoDeDiscos().getQuantidadeDeVolumes();
         
-        for (int i = 0; i < qtdDiscos(); i++) {
-            List<Discos> discos = new ArrayList<>();
+        return qtdVolumes;
+    }
+    
+    public Object totalDisco(Integer disco) {
+        DiscosGroup grupoDeVolumes = looca.getGrupoDeDiscos();
+        List<List> parametrosDiscos = new ArrayList<>();
+//        List<Object> totalVolumes = new ArrayList<>();
+        
+        for (int i = 0; i < qtdVolumes(); i++) {
+            List<Discos> volumes = new ArrayList<>();
             
-            Long totalReduzido = (grupoDeDiscos.getDiscos().get(i).getTamanho()) / 1000000000;
+            Long totalReduzido = (grupoDeVolumes.getVolumes().get(i).getTotal()) / 1000000000;
             String stringTotalReduzido = String.valueOf(totalReduzido);
             Integer integerTotalReduzido = Integer.valueOf(stringTotalReduzido);
             
-            Discos discoTamanho = new Discos(integerTotalReduzido);
+            if (integerTotalReduzido == 0) {
+                System.out.println("disco zerado");
+            } else {
+                Discos discoTamanho = new Discos(integerTotalReduzido);
+
+                volumes.add(discoTamanho);
+                parametrosDiscos.add(volumes);
+//                totalVolumes.add(parametrosDiscos);
+            }
             
-            discos.add(discoTamanho);
-            parametrosDiscos.add(discos);
-            totalDiscos.add(parametrosDiscos.get(i).get(0));
         }
         
-        return totalDiscos.get(disco);
+        return parametrosDiscos.get(disco);
     }
     
     public Object disponivelDisco(Integer disco) {
         DiscosGroup grupoDeDiscos = looca.getGrupoDeDiscos();
         List<List> parametrosDiscos = new ArrayList<>();
-        List<Object> disponivelDiscos = new ArrayList<>();
+//        List<Object> disponivelVolumes = new ArrayList<>();
         
-        for (int i = 0; i < qtdDiscos(); i++) {
-            List<Discos> discos = new ArrayList<>();
+        for (int i = 0; i < qtdVolumes(); i++) {
+            List<Discos> volumes = new ArrayList<>();
             
-            Long disponivelReduzido = (grupoDeDiscos.getDiscos().get(0).getTamanho());
+            Long disponivelReduzido = (grupoDeDiscos.getVolumes().get(i).getDisponivel()) / 1000000000;
             String stringDisponivelReduzido = String.valueOf(disponivelReduzido);
             Integer integerDisponivelReduzido = Integer.valueOf(stringDisponivelReduzido);
             
-            Discos discoDisponivel = new Discos(integerDisponivelReduzido);
+            if (integerDisponivelReduzido == 0) {
+                System.out.println("disco zerado");
+            } else {
+                Discos discoDisponivel = new Discos(integerDisponivelReduzido);
+
+                volumes.add(discoDisponivel);
+                parametrosDiscos.add(volumes);
+//                disponivelVolumes.add(parametrosDiscos.get(i).get(0));
+            }
             
-            discos.add(discoDisponivel);
-            parametrosDiscos.add(discos);
-            disponivelDiscos.add(parametrosDiscos.get(i).get(0));
         }
         
-        return disponivelDiscos.get(disco);
+        return parametrosDiscos.get(disco);
     }
     
 }

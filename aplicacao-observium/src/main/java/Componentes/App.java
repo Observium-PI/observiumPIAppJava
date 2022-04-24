@@ -53,33 +53,45 @@ public class App {
         monitorar.incluirMonitoramento(monitoramentoMemoria);
         
         //INCLUINDO DADOS SOBRE O DISCO
-        
-        System.out.println("Uso da CPU: " + cpu.usoProcessador());
-        System.out.println("Memória em uso: " + memoria.memoriaEmUso());
-        System.out.println("Memória disponivel: " + memoria.memoriaDisponivel());
-        System.out.println("Memória total: " + memoria.memoriaTotal());
-        
-//        for (int i = 0; i < disco.qtdDiscos(); i++) {
-//            System.out.println("Tamanho do disco " + (i + 1) + ": " + disco.totalDisco(i));
-//            System.out.println("Espaço disponivel no disco: " + disco.disponivelDisco(i) + "\n");
-//        }
-    
-//        String arroz = teste.get(2).getPontoDeMontagem();
-        
-//        System.out.println(arroz);
-        
-//        for (int i = 0; i < discos.getGrupoDeDiscos().getVolumes().size(); i++) {
-//            String teseteSemBarra = teste.get(i).getPontoDeMontagem();
-//            Long putz = teste.get(i).getTotal() / 1000000000;
-//            Long teste2 = teste.get(i).getDisponivel() / 1000000000;
-//            Long conta = (putz - teste2);
-//            teseteSemBarra = teseteSemBarra.replace(":\\", "");
-//            System.out.println( teseteSemBarra);
-//            System.out.println(putz);
-//            System.out.println(teste2);
-//            System.out.println(conta);
-//        }
+        for (int i = 0; i < disco.qtdDiscos(); i++) {
+            //TRANSFORMANDO OBJECT EM INTEGER
+            Object total = disco.totalDisco(i);
+            String totalDisk = String.valueOf(total);
+            totalDisk = totalDisk.replace("[", "");
+            totalDisk = totalDisk.replace("]", "");
+            Integer totalDisco = Integer.valueOf(totalDisk);
+            
+            Object disponivel = disco.disponivelDisco(i);
+            String disponivelDisk = String.valueOf(disponivel);
+            disponivelDisk = disponivelDisk.replace("[", "");
+            disponivelDisk = disponivelDisk.replace("]", "");
+            Integer disponivelDisco = Integer.valueOf(disponivelDisk);
+            
+            if (totalDisco == 0 && disponivelDisco == 0) {
+                System.out.println("Disco zerado");
+            } else {
+                String discoAtual = "disco " + (i + 1);
+            
+                Integer fkComponenteDisco = monitorar.buscarIdCcomponente(discoAtual, enderecoMac);
+                String dataHoraDisco = dataFormat.format(LocalDateTime.now());
+                String unidadeDeMedidaDisco = "%";
+                
+                //CONTA PARA TRANSFORMAR O USO DO DISCO EM PORCENTAGEM
+                Integer usoDisk = totalDisco - disponivelDisco;
+                usoDisk = usoDisk * 100;
+                usoDisk = usoDisk / totalDisco;
 
+                String medida = String.valueOf(usoDisk);
+                Double medidaDisco = Double.valueOf(medida);
+
+                Monitoramento monitoramentoDisco = new Monitoramento(fkComponenteDisco, dataHoraDisco, 
+                    medidaDisco, unidadeDeMedidaDisco);
+
+                monitorar.incluirMonitoramento(monitoramentoDisco);
+            }
+            
+        }
+                
     }
     
 }
