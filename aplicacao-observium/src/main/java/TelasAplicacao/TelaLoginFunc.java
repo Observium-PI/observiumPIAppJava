@@ -3,15 +3,17 @@ package TelasAplicacao;
 import Usuarios.UsuarioCrud;
 import org.apache.commons.dbcp2.BasicDataSource;
 import TelasAplicacao.TelaFuncMaq;
+import java.awt.Color;
 
 public class TelaLoginFunc extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form TelaLoginFunc
      */
     public TelaLoginFunc() {
         initComponents();
         setLocationRelativeTo(this);
+        logo.requestFocusInWindow();
     }
 
     /**
@@ -47,6 +49,16 @@ public class TelaLoginFunc extends javax.swing.JFrame {
         });
         getContentPane().add(bttLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, 220, 40));
 
+        codigoUsuario.setForeground(new java.awt.Color(153, 153, 153));
+        codigoUsuario.setText("Insira seu nome de usuário");
+        codigoUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                codigoUsuarioFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codigoUsuarioFocusLost(evt);
+            }
+        });
         codigoUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 codigoUsuarioActionPerformed(evt);
@@ -84,19 +96,19 @@ public class TelaLoginFunc extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-       
+
     private void bttLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttLoginActionPerformed
         BasicDataSource dataSource = new BasicDataSource();
 
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
-        
+
         String usuarioLogin = codigoUsuario.getText();
         String usuarioSenha = senhaUsuario.getText();
-                
+
         String login = usuario.validarUsuario(usuarioLogin, usuarioSenha).toString().replace("[{count(login)=", "");
         login = login.replace("}, {count(login)=", "");
         login = login.replace("}]", "");
-        
+
         switch (login) {
             case "1":
                 String nome = usuario.buscarNomeUsuario(usuarioLogin);
@@ -105,12 +117,12 @@ public class TelaLoginFunc extends javax.swing.JFrame {
                 this.dispose();
                 registro.setVisible(true);
                 break;
-                
+
             default:
                 resultadoLogin.setText("Usuário ou senha incorreto.");
                 break;
         }
-        
+
     }//GEN-LAST:event_bttLoginActionPerformed
 
     private void codigoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codigoUsuarioActionPerformed
@@ -120,6 +132,22 @@ public class TelaLoginFunc extends javax.swing.JFrame {
     private void senhaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_senhaUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_senhaUsuarioActionPerformed
+
+    private void codigoUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codigoUsuarioFocusGained
+        // TODO add your handling code here:
+        if (codigoUsuario.getText().equals("Insira seu nome de usuário")) {
+            codigoUsuario.setText("");
+            codigoUsuario.setForeground(new Color(102, 102, 102));
+        }
+    }//GEN-LAST:event_codigoUsuarioFocusGained
+
+    private void codigoUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codigoUsuarioFocusLost
+        // TODO add your handling code here:
+        if (codigoUsuario.getText().equals("")) {
+            codigoUsuario.setText("Insira seu nome de usuário");
+            codigoUsuario.setForeground(new Color(153, 153, 153));
+        }
+    }//GEN-LAST:event_codigoUsuarioFocusLost
 
     /**
      * @param args the command line arguments
