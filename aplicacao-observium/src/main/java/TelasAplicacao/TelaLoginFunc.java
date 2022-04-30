@@ -104,7 +104,8 @@ public class TelaLoginFunc extends javax.swing.JFrame {
 
         String usuarioLogin = codigoUsuario.getText();
         String usuarioSenha = senhaUsuario.getText();
-
+        
+        //CHAMANDO UM MÉTODO PARA VALIDAR O USUÁRIO QUE ESTÁ TENTANDO LOGAR
         String login = usuario.validarUsuario(usuarioLogin, usuarioSenha).toString().replace("[{count(login)=", "");
         login = login.replace("}, {count(login)=", "");
         login = login.replace("}]", "");

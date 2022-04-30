@@ -22,6 +22,7 @@ public class UsuarioCrud {
         this.nomeUsuario = usuario;
     }
     
+    //MÉTODO PARA VALIDAR O LOGIN DO USUÁRIO
     public List validarUsuario(String login, String senha) {
         List<Map<String, Object>> buscaUsuario = conexao.getConexao().queryForList(
                   "select count(login) from Usuario where login = ? "
@@ -30,6 +31,7 @@ public class UsuarioCrud {
         return buscaUsuario;
     }
     
+    //MÉTODO PARA BUSCAR O NOME DO USUÁRIO LOGADO A PARTIR DO CÓDIGO DE LOGIN
     public String buscarNomeUsuario(String usuario) {
         List<Map<String, Object>> nameUsuario = conexao.getConexao().queryForList(
                   "select nome from Usuario where login = ?", usuario);
@@ -45,6 +47,7 @@ public class UsuarioCrud {
         return nome;
     }
     
+    //MÉTODO PARA BUSCAR O ID DO HOSPITAL DO USUÁRIO LOGADO
     public List buscarIdHospital(String login) {
         List<Map<String, Object>> buscaIdHospital = conexao.getConexao().queryForList(
                   "select fkHospital from Usuario where login = ?", login);

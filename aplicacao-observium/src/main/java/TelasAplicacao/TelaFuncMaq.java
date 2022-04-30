@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import java.awt.Color;
-import org.springframework.dao.DuplicateKeyException;
-import BancoDeDados.ConexaoBancoLocal;
 
 /**
  *

@@ -1,7 +1,6 @@
 package Maquina;
 
 import com.github.britooo.looca.api.core.Looca;
-import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -33,6 +32,7 @@ public class MaquinaCrud {
     }
     
     //METODO PARA INCLUIR MAIS DE UMA MAQUINA
+    //NÃO ESTAMOS UTILIZANDO ESSE MÉTODO NO MOMENTO
     public void incluirMaquinas(List<Maquina> novasMaquinas) {
         for (Maquina novasMaquina : novasMaquinas) {
             jdbcTemplate.update("insert into Computador (endMac, nome, fabricante, "
@@ -46,12 +46,14 @@ public class MaquinaCrud {
         }
     }
     
+    //MÉTODO PARA BUSCAR O HOSTNAME DA MÁQUINA
     public String buscarHostName() throws UnknownHostException {
         String hostName = InetAddress.getLocalHost().getHostName();
         
         return hostName;
     }
     
+    //MÉTODO PARA BUSCAR O ENDEREÇO MAC DA MÁQUINA
     public String buscarEndMac() throws UnknownHostException, SocketException {
         InetAddress localHost = InetAddress.getLocalHost();
         NetworkInterface ni = NetworkInterface.getByInetAddress(localHost);
@@ -66,18 +68,21 @@ public class MaquinaCrud {
         return macAdress;
     }
     
+    //MÉTODO PARA BUSCAR O FABRICANTE DA MÁQUINA
     public String buscarFabricante() {
         String fabricante = looca.getSistema().getFabricante();
         
         return fabricante;
     }
     
+    //MÉTODO PARA BUSCAR A ARQUITETURA DA MÁQUINA
     public Integer buscarArquitetura() {
         Integer arquitetura = looca.getSistema().getArquitetura();
         
         return arquitetura;
     }
     
+    //MÉTODO PARA BUSCAR O SISTEMA OPERACIONAL DA MÁQUINA
     public String buscarSO() {
         String sistemaOperacional = looca.getSistema().getSistemaOperacional();
         

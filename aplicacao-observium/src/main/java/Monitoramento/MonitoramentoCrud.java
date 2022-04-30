@@ -16,6 +16,7 @@ public class MonitoramentoCrud {
         jdbcTemplate = conexao.getConexao();
     }
     
+    //MÉTODO PARA INSERIR O MONITORAMENTO NO BANCO DE DADOS
     public void incluirMonitoramento(Monitoramento novoMonitoramento) {
         jdbcTemplate.update("insert into Monitoramento (fkComponente, dataHora,"
                 + "medida, unidadeDeMedida) values (?,?,?,?)",
@@ -25,14 +26,18 @@ public class MonitoramentoCrud {
         novoMonitoramento.getUnidadeDeMedida());
     }
     
-    public Integer buscarIdCcomponente(String tipoComponente, String endMAC) {
+    //MÉTODO PARA BUSCAR O ID DE UM COMPONENTE UTILIZANDO O TIPO DO COMPONENTE
+    //E O ENDEREÇO MAC DO COMPUTADOR
+    public Integer buscarIdComponente(String tipoComponente, String endMAC) {
         List<Map<String, Object>> buscarId = conexao.getConexao().queryForList(
                 "select idComponente from Componente as C join Computador as PC "
               + "on fkComputador = idComputador where C.tipoComponente = ? "
               + "and PC.endMAC = ?", tipoComponente, endMAC);
         
         Object id = buscarId;
-
+        
+        //RETIRANDO O QUE NÃO É NECESSÁRIO DA BUSCA NO BANCO DE DADOS E TRANSFORMANDO
+        //EM UM NÚMERO INTEIRO
         String idComp = String.valueOf(id);
         idComp = idComp.replace("[{idComponente=", "");
         idComp = idComp.replace("}]", "");

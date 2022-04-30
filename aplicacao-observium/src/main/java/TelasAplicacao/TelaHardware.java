@@ -28,9 +28,12 @@ public class TelaHardware extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
         
+        //INSTÂNCIANDO AS CLASSES
         MaquinaCrud computador = new MaquinaCrud(dataSource);
         Disk disco = new Disk(dataSource);
         Looca looca = new Looca();
+        
+        //==============================COMPUTADOR==============================
         
         //OBTENDO INFORMAÇÕES DO COMPUTADOR E GUARDANDO EM VARIAVEIS
         String hostName = computador.buscarHostName();
@@ -39,17 +42,21 @@ public class TelaHardware extends javax.swing.JFrame {
         Integer arquitetura = computador.buscarArquitetura();
         String sistemaOperacional = computador.buscarSO();
         
+        //TRANFERINDO OS DADOS GUARDADOS DO COMPUTADOR PARA AS LABELS NA TELA
         labelHostname.setText("HostName: " + hostName);
         labelEndMac.setText("Endereço MAC: " + endMac);
         labelFabricante.setText("Fabricante: " + fabricante);
         labelArquitetura.setText("Arquitetura: " + arquitetura + " bits");
         labelSistemaOperacional.setText("Sistema Operacional: " + sistemaOperacional);
         
+        //=============================COMPONENTES==============================
+        
         //OBTENDO INFORMAÇÕES DOS COMPONENTES E GUARDANDO EM VARIAVEIS
         String cpu = looca.getProcessador().getNome();
         Long memoria = looca.getMemoria().getTotal() / 1000000000;
         Integer discos = looca.getGrupoDeDiscos().getQuantidadeDeDiscos();
         
+        //TRANFERINDO OS DADOS GUARDADOS DOS COMPONENTES PARA AS LABELS NA TELA
         labelCpu.setText("Processador: " + cpu);
         labelMemory.setText("Memória disponivel: " + memoria + " GB");
         labelDiscos.setText("Quantidade de Discos: " + discos + " discos disponiveis");
