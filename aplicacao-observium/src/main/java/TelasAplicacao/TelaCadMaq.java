@@ -15,31 +15,26 @@ import java.awt.Color;
 
 /**
  *
- * @author fabio.gdesouza
+ * @author aluno
  */
-public class TelaFuncMaq extends javax.swing.JFrame {
+public class TelaCadMaq extends javax.swing.JFrame {
 
     public String login;
     public String nome;
     
     BasicDataSource dataSource = new BasicDataSource();
-
-    /**
-     * Creates new form TelaFuncMaq
-     */
-    public TelaFuncMaq() {
+    
+    public TelaCadMaq() {
         initComponents();
         setLocationRelativeTo(this);
     }
-
-    public TelaFuncMaq(UsuarioCrud usuario) {
+    
+    public TelaCadMaq(UsuarioCrud usuario) {
         initComponents();
         setLocationRelativeTo(this);
 
         login = usuario.getLoginUsuario();
         nome = usuario.getUsuario();
-        String texto = "Bem vindo(a) " + nome + "!";
-        labelNomeUsuario.setText(texto);
     }
 
     /**
@@ -51,103 +46,81 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        labelMostrarErro = new javax.swing.JLabel();
-        labelNomeUsuario = new javax.swing.JLabel();
-        labelIniciar = new javax.swing.JLabel();
-        bttListar = new javax.swing.JButton();
-        bttCadastrar = new javax.swing.JButton();
-        labelHardware = new javax.swing.JLabel();
-        labelCadastrar = new javax.swing.JLabel();
-        bttStart = new javax.swing.JButton();
+        titulo = new javax.swing.JLabel();
+        setor = new javax.swing.JLabel();
+        andar = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        labelMostrarErro = new javax.swing.JLabel();
+        bttCadastrar = new javax.swing.JButton();
+        comboBoxSetor = new javax.swing.JComboBox<>();
+        numeroAndar = new javax.swing.JTextField();
         background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        titulo.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        titulo.setForeground(new java.awt.Color(255, 255, 255));
+        titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titulo.setText("Localidade da máquina");
+        titulo.setPreferredSize(new java.awt.Dimension(149, 20));
+        getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 450, 40));
+
+        setor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        setor.setForeground(new java.awt.Color(255, 255, 255));
+        setor.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        setor.setText("Setor:");
+        setor.setPreferredSize(new java.awt.Dimension(149, 20));
+        getContentPane().add(setor, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 70, 40));
+
+        andar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        andar.setForeground(new java.awt.Color(255, 255, 255));
+        andar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        andar.setText("Andar:");
+        andar.setPreferredSize(new java.awt.Dimension(149, 20));
+        getContentPane().add(andar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, 60, 40));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
 
         labelMostrarErro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelMostrarErro.setForeground(new java.awt.Color(204, 0, 0));
         labelMostrarErro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(labelMostrarErro, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, 450, 70));
-
-        labelNomeUsuario.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        labelNomeUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        labelNomeUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelNomeUsuario.setText("Bem Vindo!");
-        labelNomeUsuario.setPreferredSize(new java.awt.Dimension(149, 20));
-        jPanel1.add(labelNomeUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 450, 40));
-
-        labelIniciar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelIniciar.setForeground(new java.awt.Color(255, 255, 255));
-        labelIniciar.setText("Iniciar Aplicação Java:");
-        jPanel1.add(labelIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 250, 50));
-
-        bttListar.setBackground(new java.awt.Color(0, 0, 0));
-        bttListar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bttListar.setForeground(new java.awt.Color(255, 255, 255));
-        bttListar.setText("Hardware");
-        bttListar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttListarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(bttListar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 120, 40));
+        getContentPane().add(labelMostrarErro, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, 450, 70));
 
         bttCadastrar.setBackground(new java.awt.Color(0, 0, 0));
         bttCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bttCadastrar.setForeground(new java.awt.Color(255, 255, 255));
-        bttCadastrar.setText("Cadastrar");
+        bttCadastrar.setText("Concluir Cadastro");
         bttCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bttCadastrarActionPerformed(evt);
             }
         });
-        jPanel1.add(bttCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 360, 120, 40));
+        getContentPane().add(bttCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 190, 40));
 
-        labelHardware.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        labelHardware.setForeground(new java.awt.Color(255, 255, 255));
-        labelHardware.setText("Listar Hardware:");
-        jPanel1.add(labelHardware, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 310, 120, 50));
-
-        labelCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        labelCadastrar.setForeground(new java.awt.Color(255, 255, 255));
-        labelCadastrar.setText("Cadastrar Máquina:");
-        jPanel1.add(labelCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 120, 50));
-
-        bttStart.setBackground(new java.awt.Color(0, 0, 0));
-        bttStart.setForeground(new java.awt.Color(255, 255, 255));
-        bttStart.setText("Start");
-        bttStart.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxSetor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Recepção", "Triagem", "Ala médica" }));
+        comboBoxSetor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttStartActionPerformed(evt);
+                comboBoxSetorActionPerformed(evt);
             }
         });
-        jPanel1.add(bttStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 250, 40));
+        getContentPane().add(comboBoxSetor, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 190, 40));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
+        numeroAndar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        numeroAndar.setText("00");
+        getContentPane().add(numeroAndar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, 60, 40));
 
         background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/FundoObservium2.jpg"))); // NOI18N
         background.setText("jLabel1");
-        jPanel1.add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 490));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 490));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void comboBoxSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSetorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxSetorActionPerformed
 
     private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
         try {
@@ -163,7 +136,7 @@ public class TelaFuncMaq extends javax.swing.JFrame {
             String fabricante = computador.buscarFabricante();
             Integer arquitetura = computador.buscarArquitetura();
             String sistemaOperacional = computador.buscarSO();
-            String localidade = "teste";
+            String localidade = comboBoxSetor.getName();
 
             //BUSCANDO O ID DO HOSPITAL DO USUÁRIO LOGADO PARA CADASTRAR A MÁQUINA
             List idHosp = usuario.buscarIdHospital(login);
@@ -176,7 +149,7 @@ public class TelaFuncMaq extends javax.swing.JFrame {
             try {
                 //INSERINDO COMPUTADOR NO BANCO COM AS INFORMAÇÕES OBTIDAS
                 Maquina maquina = new Maquina(hostName, endMac, fabricante,
-                        arquitetura, sistemaOperacional, localidade, fkHospital);
+                    arquitetura, sistemaOperacional, localidade, fkHospital);
 
                 computador.incluir(maquina); //INCLUIR NO BANCO
 
@@ -226,26 +199,7 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         } catch (SocketException ex) {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_bttCadastrarActionPerformed
-
-    private void bttStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStartActionPerformed
-        TelaCaptura registro = new TelaCaptura();
-        this.dispose();
-        registro.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_bttStartActionPerformed
-
-    private void bttListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttListarActionPerformed
-        try {
-            TelaHardware hardware = new TelaHardware();
-            this.dispose();
-            hardware.setVisible(true);
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SocketException ex) {
-            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_bttListarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -264,35 +218,33 @@ public class TelaFuncMaq extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaFuncMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaCadMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaFuncMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaCadMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaFuncMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaCadMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaFuncMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaCadMaq.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaFuncMaq().setVisible(true);
+                new TelaCadMaq().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel andar;
     private javax.swing.JLabel background;
     private javax.swing.JButton bttCadastrar;
-    private javax.swing.JButton bttListar;
-    private javax.swing.JButton bttStart;
+    private javax.swing.JComboBox<String> comboBoxSetor;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel labelCadastrar;
-    private javax.swing.JLabel labelHardware;
-    private javax.swing.JLabel labelIniciar;
     private javax.swing.JLabel labelMostrarErro;
-    private javax.swing.JLabel labelNomeUsuario;
+    private javax.swing.JTextField numeroAndar;
+    private javax.swing.JLabel setor;
+    private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
 }

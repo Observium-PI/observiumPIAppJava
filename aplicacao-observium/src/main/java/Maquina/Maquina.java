@@ -15,14 +15,16 @@ public class Maquina {
     private String fabricante;
     private Integer arquitetura;
     private String sistemaOperacional;
+    private String localidade;
     private Integer fkHospital;
 
-    public Maquina(String hostName, String endMac, String fabricante, Integer arquitetura, String sistemaOperacional, Integer fkHospital) {
+    public Maquina(String hostName, String endMac, String fabricante, Integer arquitetura, String sistemaOperacional, String localidade, Integer fkHospital) {
         this.hostName = hostName;
         this.endMac = endMac;
         this.fabricante = fabricante;
         this.arquitetura = arquitetura;
         this.sistemaOperacional = sistemaOperacional;
+        this.localidade = localidade;
         this.fkHospital = fkHospital;
     }
 
@@ -72,6 +74,14 @@ public class Maquina {
 
     public void setSistemaOperacional(String sistemaOperacional) {
         this.sistemaOperacional = sistemaOperacional;
+    }
+
+    public String getLocalidade() {
+        return localidade;
+    }
+
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
     }
 
     public Integer getFkHospital() {
