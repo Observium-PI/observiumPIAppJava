@@ -19,10 +19,11 @@ import java.awt.Color;
  */
 public class TelaFuncMaq extends javax.swing.JFrame {
 
+    BasicDataSource dataSource = new BasicDataSource();
+    
     public String login;
     public String nome;
     
-    BasicDataSource dataSource = new BasicDataSource();
 
     /**
      * Creates new form TelaFuncMaq
@@ -52,10 +53,11 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        bttRetornar = new javax.swing.JButton();
         labelMostrarErro = new javax.swing.JLabel();
         labelNomeUsuario = new javax.swing.JLabel();
         labelIniciar = new javax.swing.JLabel();
-        bttListar = new javax.swing.JButton();
+        bttHardware = new javax.swing.JButton();
         bttCadastrar = new javax.swing.JButton();
         labelHardware = new javax.swing.JLabel();
         labelCadastrar = new javax.swing.JLabel();
@@ -66,6 +68,16 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        bttRetornar.setBackground(new java.awt.Color(0, 0, 0));
+        bttRetornar.setForeground(new java.awt.Color(255, 255, 255));
+        bttRetornar.setText("Deslogar");
+        bttRetornar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttRetornarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 80, 30));
 
         labelMostrarErro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelMostrarErro.setForeground(new java.awt.Color(204, 0, 0));
@@ -84,16 +96,16 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         labelIniciar.setText("Iniciar Aplicação Java:");
         jPanel1.add(labelIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 250, 50));
 
-        bttListar.setBackground(new java.awt.Color(0, 0, 0));
-        bttListar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        bttListar.setForeground(new java.awt.Color(255, 255, 255));
-        bttListar.setText("Hardware");
-        bttListar.addActionListener(new java.awt.event.ActionListener() {
+        bttHardware.setBackground(new java.awt.Color(0, 0, 0));
+        bttHardware.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bttHardware.setForeground(new java.awt.Color(255, 255, 255));
+        bttHardware.setText("Hardware");
+        bttHardware.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttListarActionPerformed(evt);
+                bttHardwareActionPerformed(evt);
             }
         });
-        jPanel1.add(bttListar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 120, 40));
+        jPanel1.add(bttHardware, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 120, 40));
 
         bttCadastrar.setBackground(new java.awt.Color(0, 0, 0));
         bttCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -150,94 +162,38 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
-        try {
-            UsuarioCrud usuario = new UsuarioCrud(dataSource);
+        BasicDataSource dataSource = new BasicDataSource();
 
-            //==========================COMPUTADOR==============================
-            //INSTANCIANDO A CLASSE MAQUINA CRUD
-            MaquinaCrud computador = new MaquinaCrud(dataSource);
-
-            //OBTENDO INFORMAÇÕES DO COMPUTADOR E GUARDANDO EM VARIAVEIS
-            String hostName = computador.buscarHostName();
-            String endMac = computador.buscarEndMac();
-            String fabricante = computador.buscarFabricante();
-            Integer arquitetura = computador.buscarArquitetura();
-            String sistemaOperacional = computador.buscarSO();
-            String localidade = "teste";
-
-            //BUSCANDO O ID DO HOSPITAL DO USUÁRIO LOGADO PARA CADASTRAR A MÁQUINA
-            List idHosp = usuario.buscarIdHospital(login);
-            String idHospital = String.valueOf(idHosp);
-            idHospital = idHospital.replace("[{fkHospital=", "");
-            idHospital = idHospital.replace("}]", "");
-
-            Integer fkHospital = Integer.valueOf(idHospital);
-
-            try {
-                //INSERINDO COMPUTADOR NO BANCO COM AS INFORMAÇÕES OBTIDAS
-                Maquina maquina = new Maquina(hostName, endMac, fabricante,
-                        arquitetura, sistemaOperacional, localidade, fkHospital);
-
-                computador.incluir(maquina); //INCLUIR NO BANCO
-
-                //========================COMPONENTES===========================
-                ComponenteCrud componentes = new ComponenteCrud(dataSource);
-
-                //BUSCANDO ID DO COMPUTADOR CADASTRADO
-                List idPc = componentes.buscarIdComputador(hostName);
-                String idMaquina = String.valueOf(idPc);
-                idMaquina = idMaquina.replace("[{idComputador=", "");
-                idMaquina = idMaquina.replace("}]", "");
-
-                Integer idComputadores = Integer.valueOf(idMaquina);
-
-                String haveCpu = componentes.buscarCpuComponente();
-                String haveMemoria = componentes.buscarMemoriaComponente();
-
-                //INSERINDO CPU
-                Componente cpu = new Componente(haveCpu, idComputadores);
-                componentes.incluirComponente(cpu); //INCLUIR NO BANCO
-
-                //INSERINDO MEMÓRIA
-                if (haveMemoria != null) {
-                    Componente memoria = new Componente(haveMemoria, idComputadores);
-                    componentes.incluirComponente(memoria); //INCLUIR NO BANCO
-                } else {
-                    System.out.println("Sem memória");
-                }
-
-                //INSERINDO DISCOS
-                Integer haveDisco = componentes.buscarVolumesComponente();
-
-                for (int i = 0; i < haveDisco; i++) {
-                    Componente disco = new Componente("disco " + (i + 1), idComputadores);
-                    componentes.incluirComponente(disco); //INCLUIR NO BANCO
-                }
-
-                labelMostrarErro.setForeground(Color.green);
-                labelMostrarErro.setText("Máquina cadastrada com sucesso!");
-            } catch (org.springframework.dao.DuplicateKeyException exception) {
-                labelMostrarErro.setForeground(Color.red);
-                labelMostrarErro.setText("Máquina já cadastrada.");
-            }
-
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SocketException ex) {
-            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        UsuarioCrud usuario = new UsuarioCrud(dataSource);
+        
+        String nomeUsuario = usuario.buscarNomeUsuario(login);
+        usuario.setUsuario(nomeUsuario);
+        TelaCadMaq cadastroMaq = new TelaCadMaq(usuario);
+        this.dispose();
+        cadastroMaq.setVisible(true);
     }//GEN-LAST:event_bttCadastrarActionPerformed
 
     private void bttStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStartActionPerformed
-        TelaCaptura registro = new TelaCaptura();
+        BasicDataSource dataSource = new BasicDataSource();
+
+        UsuarioCrud usuario = new UsuarioCrud(dataSource);
+
+        String nomeUsuario = usuario.buscarNomeUsuario(login);
+        usuario.setUsuario(nomeUsuario);
+        TelaCaptura registro = new TelaCaptura(usuario);
         this.dispose();
         registro.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_bttStartActionPerformed
 
-    private void bttListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttListarActionPerformed
+    private void bttHardwareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttHardwareActionPerformed
         try {
-            TelaHardware hardware = new TelaHardware();
+            BasicDataSource dataSource = new BasicDataSource();
+
+            UsuarioCrud usuario = new UsuarioCrud(dataSource);
+            
+            String nomeUsuario = usuario.buscarNomeUsuario(login);
+            usuario.setUsuario(nomeUsuario);
+            TelaHardware hardware = new TelaHardware(usuario);
             this.dispose();
             hardware.setVisible(true);
         } catch (UnknownHostException ex) {
@@ -245,7 +201,13 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         } catch (SocketException ex) {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_bttListarActionPerformed
+    }//GEN-LAST:event_bttHardwareActionPerformed
+
+    private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
+        TelaLoginFunc telaLogin = new TelaLoginFunc();
+        this.dispose();
+        telaLogin.setVisible(true);
+    }//GEN-LAST:event_bttRetornarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -285,7 +247,8 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel background;
     private javax.swing.JButton bttCadastrar;
-    private javax.swing.JButton bttListar;
+    private javax.swing.JButton bttHardware;
+    private javax.swing.JButton bttRetornar;
     private javax.swing.JButton bttStart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

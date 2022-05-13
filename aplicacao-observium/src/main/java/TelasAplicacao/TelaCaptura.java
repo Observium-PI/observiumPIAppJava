@@ -10,19 +10,32 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Usuarios.UsuarioCrud;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 /**
  *
  * @author fabio.gdesouza
  */
 public class TelaCaptura extends javax.swing.JFrame {
-
+    
+    BasicDataSource dataSource = new BasicDataSource();
+    
+    public String login;
+    
     /**
      * Creates new form TelaCaptura
      */
     public TelaCaptura() {
         initComponents();
         setLocationRelativeTo(this);
+    }
+    
+    public TelaCaptura(UsuarioCrud usuario) {
+        initComponents();
+        setLocationRelativeTo(this);
+        
+        login = usuario.getLoginUsuario();
     }
 
     /**
@@ -34,14 +47,24 @@ public class TelaCaptura extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bttIniciarApp = new javax.swing.JButton();
         bttRetornar = new javax.swing.JButton();
+        bttIniciarApp = new javax.swing.JButton();
         logo = new javax.swing.JLabel();
         labelTexto = new javax.swing.JLabel();
         background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        bttRetornar.setBackground(new java.awt.Color(0, 0, 0));
+        bttRetornar.setForeground(new java.awt.Color(255, 255, 255));
+        bttRetornar.setText("Voltar");
+        bttRetornar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttRetornarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 80, 30));
 
         bttIniciarApp.setBackground(new java.awt.Color(0, 0, 0));
         bttIniciarApp.setForeground(new java.awt.Color(255, 255, 255));
@@ -52,16 +75,6 @@ public class TelaCaptura extends javax.swing.JFrame {
             }
         });
         getContentPane().add(bttIniciarApp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, 250, 40));
-
-        bttRetornar.setBackground(new java.awt.Color(0, 0, 0));
-        bttRetornar.setForeground(new java.awt.Color(255, 255, 255));
-        bttRetornar.setText("Sair");
-        bttRetornar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttRetornarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 430, 150, 40));
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
         getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
@@ -79,10 +92,6 @@ public class TelaCaptura extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_bttRetornarActionPerformed
-
     private void bttIniciarAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttIniciarAppActionPerformed
         App aplicacao = new App();
         try {
@@ -98,6 +107,16 @@ public class TelaCaptura extends javax.swing.JFrame {
             Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bttIniciarAppActionPerformed
+
+    private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
+        UsuarioCrud usuario = new UsuarioCrud(dataSource);
+
+        String nomeUsuario = usuario.buscarNomeUsuario(login);
+        usuario.setUsuario(nomeUsuario);
+        TelaFuncMaq funcMaq = new TelaFuncMaq(usuario);
+        this.dispose();
+        funcMaq.setVisible(true);
+    }//GEN-LAST:event_bttRetornarActionPerformed
 
     /**
      * @param args the command line arguments

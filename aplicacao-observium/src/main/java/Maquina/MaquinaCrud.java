@@ -22,12 +22,13 @@ public class MaquinaCrud {
     //METODO PARA INCLUIR APENAS UMA MAQUINA
     public void incluir(Maquina novaMaquina) {
         jdbcTemplate.update("insert into Computador (hostName, endMac, fabricante, "
-                + "arquitetura, sistemaOperacional, fkHospital) values (?,?,?,?,?,?)",
+                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
         novaMaquina.getHostName(),
         novaMaquina.getEndMac(),
         novaMaquina.getFabricante(),
         novaMaquina.getArquitetura(),
         novaMaquina.getSistemaOperacional(),
+        novaMaquina.getLocalidade(),
         novaMaquina.getFkHospital());
     }
     

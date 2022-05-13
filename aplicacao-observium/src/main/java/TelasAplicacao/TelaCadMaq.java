@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -46,11 +47,11 @@ public class TelaCadMaq extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        bttRetornar = new javax.swing.JButton();
         titulo = new javax.swing.JLabel();
         setor = new javax.swing.JLabel();
         andar = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        labelMostrarErro = new javax.swing.JLabel();
         bttCadastrar = new javax.swing.JButton();
         comboBoxSetor = new javax.swing.JComboBox<>();
         numeroAndar = new javax.swing.JTextField();
@@ -58,6 +59,16 @@ public class TelaCadMaq extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        bttRetornar.setBackground(new java.awt.Color(0, 0, 0));
+        bttRetornar.setForeground(new java.awt.Color(255, 255, 255));
+        bttRetornar.setText("Voltar");
+        bttRetornar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttRetornarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 80, 30));
 
         titulo.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         titulo.setForeground(new java.awt.Color(255, 255, 255));
@@ -83,11 +94,6 @@ public class TelaCadMaq extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
 
-        labelMostrarErro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelMostrarErro.setForeground(new java.awt.Color(204, 0, 0));
-        labelMostrarErro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(labelMostrarErro, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, 450, 70));
-
         bttCadastrar.setBackground(new java.awt.Color(0, 0, 0));
         bttCadastrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bttCadastrar.setForeground(new java.awt.Color(255, 255, 255));
@@ -109,6 +115,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
 
         numeroAndar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         numeroAndar.setText("00");
+        numeroAndar.setToolTipText("");
         getContentPane().add(numeroAndar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, 60, 40));
 
         background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/FundoObservium2.jpg"))); // NOI18N
@@ -136,8 +143,22 @@ public class TelaCadMaq extends javax.swing.JFrame {
             String fabricante = computador.buscarFabricante();
             Integer arquitetura = computador.buscarArquitetura();
             String sistemaOperacional = computador.buscarSO();
-            String localidade = comboBoxSetor.getName();
-
+            String localidade = "";
+            
+            //OBTENDO INFORMAÇÕES SOBRE A LOCALIDADE DA MÁQUINA
+            String andarMaquina = numeroAndar.getText();
+            
+            Object objectSetor = comboBoxSetor.getSelectedItem();
+            String setor = String.valueOf(objectSetor);
+            
+            if (setor.equals("Recepção")) {
+                localidade = "recepcao-" + andarMaquina;
+            } else if (setor.equals("Triagem")) {
+                localidade = "triagem-" + andarMaquina;
+            } else {
+                localidade = "alaMedica-" + andarMaquina;
+            }
+            
             //BUSCANDO O ID DO HOSPITAL DO USUÁRIO LOGADO PARA CADASTRAR A MÁQUINA
             List idHosp = usuario.buscarIdHospital(login);
             String idHospital = String.valueOf(idHosp);
@@ -186,12 +207,22 @@ public class TelaCadMaq extends javax.swing.JFrame {
                     Componente disco = new Componente("disco " + (i + 1), idComputadores);
                     componentes.incluirComponente(disco); //INCLUIR NO BANCO
                 }
-
-                labelMostrarErro.setForeground(Color.green);
-                labelMostrarErro.setText("Máquina cadastrada com sucesso!");
+                
+                JOptionPane.showMessageDialog(this, "Máquina cadastrada com sucesso!");
+                
+                String nomeUsuario = usuario.buscarNomeUsuario(login);
+                usuario.setUsuario(nomeUsuario);
+                TelaFuncMaq funcMaq = new TelaFuncMaq(usuario);
+                this.dispose();
+                funcMaq.setVisible(true);
             } catch (org.springframework.dao.DuplicateKeyException exception) {
-                labelMostrarErro.setForeground(Color.red);
-                labelMostrarErro.setText("Máquina já cadastrada.");
+                JOptionPane.showMessageDialog(this, "Máquina já cadastrada!");
+                
+                String nomeUsuario = usuario.buscarNomeUsuario(login);
+                usuario.setUsuario(nomeUsuario);
+                TelaFuncMaq funcMaq = new TelaFuncMaq(usuario);
+                this.dispose();
+                funcMaq.setVisible(true);
             }
 
         } catch (UnknownHostException ex) {
@@ -199,7 +230,18 @@ public class TelaCadMaq extends javax.swing.JFrame {
         } catch (SocketException ex) {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         }
+            
     }//GEN-LAST:event_bttCadastrarActionPerformed
+
+    private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
+        UsuarioCrud usuario = new UsuarioCrud(dataSource);
+        
+        String nomeUsuario = usuario.buscarNomeUsuario(login);
+        usuario.setUsuario(nomeUsuario);
+        TelaFuncMaq funcMaq = new TelaFuncMaq(usuario);
+        this.dispose();
+        funcMaq.setVisible(true);
+    }//GEN-LAST:event_bttRetornarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,9 +282,9 @@ public class TelaCadMaq extends javax.swing.JFrame {
     private javax.swing.JLabel andar;
     private javax.swing.JLabel background;
     private javax.swing.JButton bttCadastrar;
+    private javax.swing.JButton bttRetornar;
     private javax.swing.JComboBox<String> comboBoxSetor;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel labelMostrarErro;
     private javax.swing.JTextField numeroAndar;
     private javax.swing.JLabel setor;
     private javax.swing.JLabel titulo;

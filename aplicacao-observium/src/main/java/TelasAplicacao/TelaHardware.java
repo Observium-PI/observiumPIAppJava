@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 import com.github.britooo.looca.api.core.Looca;
 import Componentes.Disk;
+import Usuarios.UsuarioCrud;
 
 /**
  *
@@ -21,12 +22,23 @@ public class TelaHardware extends javax.swing.JFrame {
     
     BasicDataSource dataSource = new BasicDataSource();
     
+    public String login;
+    public String nome;
+    
     /**
      * Creates new form TelaHardware
      */
-    public TelaHardware() throws UnknownHostException, SocketException {
+    public TelaHardware() {
         initComponents();
         setLocationRelativeTo(this);
+    }
+    
+    public TelaHardware(UsuarioCrud usuario) throws UnknownHostException, SocketException {
+        initComponents();
+        setLocationRelativeTo(this);
+        
+        login = usuario.getLoginUsuario();
+        nome = usuario.getUsuario();
         
         //INSTÂNCIANDO AS CLASSES
         MaquinaCrud computador = new MaquinaCrud(dataSource);
@@ -92,13 +104,13 @@ public class TelaHardware extends javax.swing.JFrame {
 
         bttRetornar.setBackground(new java.awt.Color(0, 0, 0));
         bttRetornar.setForeground(new java.awt.Color(255, 255, 255));
-        bttRetornar.setText("Sair");
+        bttRetornar.setText("Voltar");
         bttRetornar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bttRetornarActionPerformed(evt);
             }
         });
-        getContentPane().add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 430, 150, 40));
+        getContentPane().add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 80, 30));
 
         labelHardware.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         labelHardware.setForeground(new java.awt.Color(255, 255, 255));
@@ -151,7 +163,13 @@ public class TelaHardware extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
-        System.exit(0);
+        UsuarioCrud usuario = new UsuarioCrud(dataSource);
+
+        String nomeUsuario = usuario.buscarNomeUsuario(login);
+        usuario.setUsuario(nomeUsuario);
+        TelaFuncMaq funcMaq = new TelaFuncMaq(usuario);
+        this.dispose();
+        funcMaq.setVisible(true);
     }//GEN-LAST:event_bttRetornarActionPerformed
 
     /**
@@ -184,13 +202,7 @@ public class TelaHardware extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    new TelaHardware().setVisible(true);
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(TelaHardware.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SocketException ex) {
-                    Logger.getLogger(TelaHardware.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                new TelaHardware().setVisible(true);
             }
         });
     }
