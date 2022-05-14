@@ -48,6 +48,13 @@
             <version>8.0.16</version>
             <!-- ou versão que já existir na .m2 local -->
         </dependency>
+        
+        <!-- Dependencias do Slack -->
+        <dependency>
+            <groupId>com.slack.api</groupId>
+            <artifactId>slack-api-client</artifactId>
+            <version>1.22.0</version>
+        </dependency>
     </dependencies>
     <name>aplicacao-observium</name>
 </project>

@@ -4,6 +4,7 @@
  */
 package TelasAplicacao;
 
+import Componentes.AlertaSlack;
 import Componentes.App;
 import java.awt.Color;
 import java.net.SocketException;
@@ -11,6 +12,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Usuarios.UsuarioCrud;
+import java.util.Timer;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 /**
@@ -94,7 +96,12 @@ public class TelaCaptura extends javax.swing.JFrame {
 
     private void bttIniciarAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttIniciarAppActionPerformed
         App aplicacao = new App();
+        AlertaSlack alerta = new AlertaSlack("Thread1");//difinindo uma thread a parte para alerta
+        
         try {
+            Timer t = new Timer();
+            t.scheduleAtFixedRate(alerta, 0, 60000);//definindo thread e chamando a classe
+            
             aplicacao.aplicacao();
             labelTexto.setForeground(Color.green);
             labelTexto.setText("Dados capturados com sucesso!");
