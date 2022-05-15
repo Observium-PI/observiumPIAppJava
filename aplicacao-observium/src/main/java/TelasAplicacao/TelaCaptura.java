@@ -11,6 +11,9 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Usuarios.UsuarioCrud;
+import java.awt.event.ActionListener;
+import java.util.TimerTask;
+import java.util.Timer;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 /**
@@ -20,6 +23,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 public class TelaCaptura extends javax.swing.JFrame {
     
     BasicDataSource dataSource = new BasicDataSource();
+    Timer timer = new Timer();
     
     public String login;
     
@@ -48,7 +52,9 @@ public class TelaCaptura extends javax.swing.JFrame {
     private void initComponents() {
 
         bttRetornar = new javax.swing.JButton();
-        bttIniciarApp = new javax.swing.JButton();
+        bttStopApp = new javax.swing.JButton();
+        bttStartApp = new javax.swing.JButton();
+        gifCarregando = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
         labelTexto = new javax.swing.JLabel();
         background = new javax.swing.JLabel();
@@ -66,15 +72,31 @@ public class TelaCaptura extends javax.swing.JFrame {
         });
         getContentPane().add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 80, 30));
 
-        bttIniciarApp.setBackground(new java.awt.Color(0, 0, 0));
-        bttIniciarApp.setForeground(new java.awt.Color(255, 255, 255));
-        bttIniciarApp.setText("Iniciar");
-        bttIniciarApp.addActionListener(new java.awt.event.ActionListener() {
+        bttStopApp.setBackground(new java.awt.Color(0, 0, 0));
+        bttStopApp.setForeground(new java.awt.Color(255, 255, 255));
+        bttStopApp.setText("Stop");
+        bttStopApp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttIniciarAppActionPerformed(evt);
+                bttStopAppActionPerformed(evt);
             }
         });
-        getContentPane().add(bttIniciarApp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, 250, 40));
+        getContentPane().add(bttStopApp, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 410, 120, 40));
+
+        bttStartApp.setBackground(new java.awt.Color(0, 0, 0));
+        bttStartApp.setForeground(new java.awt.Color(255, 255, 255));
+        bttStartApp.setText("Start");
+        bttStartApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttStartAppActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bttStartApp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 410, 120, 40));
+
+        gifCarregando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica.png"))); // NOI18N
+        gifCarregando.setToolTipText("");
+        gifCarregando.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(gifCarregando, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 190, 160));
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
         getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
@@ -83,7 +105,7 @@ public class TelaCaptura extends javax.swing.JFrame {
         labelTexto.setForeground(new java.awt.Color(255, 255, 255));
         labelTexto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelTexto.setText("Captura de dados.");
-        getContentPane().add(labelTexto, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 610, 70));
+        getContentPane().add(labelTexto, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 610, 70));
 
         background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/FundoObservium2.jpg"))); // NOI18N
         background.setText("jLabel1");
@@ -92,23 +114,39 @@ public class TelaCaptura extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bttIniciarAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttIniciarAppActionPerformed
+    private void bttStartAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStartAppActionPerformed
         App aplicacao = new App();
+        timer = new Timer();
+        
         try {
-            aplicacao.aplicacao();
-            labelTexto.setForeground(Color.green);
-            labelTexto.setText("Dados capturados com sucesso!");
+            int delay = 0;   // tempo de espera antes da 1ª execução da tarefa.
+            int interval = 3000;  // intervalo no qual a tarefa será executada.
+            
+            timer.scheduleAtFixedRate(new TimerTask() {
+                public void run() {
+                    try {
+                        aplicacao.aplicacao();           
+                        labelTexto.setForeground(Color.cyan);
+                        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loadingNuvem.gif")));
+                        labelTexto.setText("Captura de dados iniciada...");
+                    } catch (UnknownHostException ex) {
+                        Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SocketException ex) {
+                        Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }, delay, interval);
+            
         } catch (java.lang.NumberFormatException ex) {
             labelTexto.setForeground(Color.red);
             labelTexto.setText("Máquina não cadastrada.");
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SocketException ex) {
-            Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_bttIniciarAppActionPerformed
+        } 
+        
+    }//GEN-LAST:event_bttStartAppActionPerformed
 
     private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
+        timer.cancel();
+        
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
 
         String nomeUsuario = usuario.buscarNomeUsuario(login);
@@ -117,6 +155,13 @@ public class TelaCaptura extends javax.swing.JFrame {
         this.dispose();
         funcMaq.setVisible(true);
     }//GEN-LAST:event_bttRetornarActionPerformed
+
+    private void bttStopAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStopAppActionPerformed
+        timer.cancel();
+        labelTexto.setForeground(Color.white);
+        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica.png")));
+        labelTexto.setText("Captura de dados encerrada...");
+    }//GEN-LAST:event_bttStopAppActionPerformed
 
     /**
      * @param args the command line arguments
@@ -155,8 +200,10 @@ public class TelaCaptura extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel background;
-    private javax.swing.JButton bttIniciarApp;
     private javax.swing.JButton bttRetornar;
+    private javax.swing.JButton bttStartApp;
+    private javax.swing.JButton bttStopApp;
+    private javax.swing.JLabel gifCarregando;
     private javax.swing.JLabel labelTexto;
     private javax.swing.JLabel logo;
     // End of variables declaration//GEN-END:variables
