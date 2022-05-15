@@ -22,7 +22,7 @@ public class Memory {
         String memoriaString = String.valueOf(memoria);
         Double memoriaTotal = Double.valueOf(memoriaString);
         
-        return memoriaTotal;
+        return memoriaTotal / 1000000000;
     }
     
     public Double memoriaEmUso() {
@@ -30,7 +30,7 @@ public class Memory {
         String memoriaString = String.valueOf(memoria);
         Double memoriaEmUso = Double.valueOf(memoriaString);
         
-        return memoriaEmUso;
+        return memoriaEmUso / 1000000000;
     }
     
     public Double memoriaDisponivel() {
@@ -38,6 +38,6 @@ public class Memory {
         String memoriaString = String.valueOf(memoria);
         Double memoriaDisponivel = Double.valueOf(memoriaString);
         
-        return memoriaDisponivel;
+        return memoriaDisponivel / 1000000000;
     }
 }

@@ -49,9 +49,7 @@ public class Disk {
             String stringTotalReduzido = String.valueOf(totalReduzido);
             Integer integerTotalReduzido = Integer.valueOf(stringTotalReduzido);
             
-            if (integerTotalReduzido == 0) {
-                System.out.println("disco zerado");
-            } else {
+            if (integerTotalReduzido != 0) {
                 Discos discoTamanho = new Discos(integerTotalReduzido);
 
                 volumes.add(discoTamanho);
@@ -76,9 +74,7 @@ public class Disk {
             String stringDisponivelReduzido = String.valueOf(disponivelReduzido);
             Integer integerDisponivelReduzido = Integer.valueOf(stringDisponivelReduzido);
             
-            if (integerDisponivelReduzido == 0) {
-                System.out.println("disco zerado");
-            } else {
+            if (integerDisponivelReduzido != 0) {
                 Discos discoDisponivel = new Discos(integerDisponivelReduzido);
 
                 volumes.add(discoDisponivel);

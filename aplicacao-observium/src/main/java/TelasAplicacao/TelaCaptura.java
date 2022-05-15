@@ -4,6 +4,7 @@
  */
 package TelasAplicacao;
 
+import Componentes.AlertaSlack;
 import Componentes.App;
 import java.awt.Color;
 import java.net.SocketException;
@@ -24,6 +25,7 @@ public class TelaCaptura extends javax.swing.JFrame {
     
     BasicDataSource dataSource = new BasicDataSource();
     Timer timer = new Timer();
+    Timer t = new Timer();
     
     public String login;
     
@@ -33,11 +35,13 @@ public class TelaCaptura extends javax.swing.JFrame {
     public TelaCaptura() {
         initComponents();
         setLocationRelativeTo(this);
+        bttStopApp.setEnabled(false);
     }
     
     public TelaCaptura(UsuarioCrud usuario) {
         initComponents();
         setLocationRelativeTo(this);
+        bttStopApp.setEnabled(false);
         
         login = usuario.getLoginUsuario();
     }
@@ -115,26 +119,36 @@ public class TelaCaptura extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bttStartAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStartAppActionPerformed
+        bttStartApp.setEnabled(false);
+        bttStopApp.setEnabled(true);
         App aplicacao = new App();
+        AlertaSlack alerta = new AlertaSlack("Thread1");//definindo uma thread a parte para alerta
+        
         timer = new Timer();
+        t = new Timer();
         
         try {
             int delay = 0;   // tempo de espera antes da 1ª execução da tarefa.
             int interval = 3000;  // intervalo no qual a tarefa será executada.
+            t.scheduleAtFixedRate(alerta, 0, 60000);
             
             timer.scheduleAtFixedRate(new TimerTask() {
                 public void run() {
-                    try {
-                        aplicacao.aplicacao();           
+                    
+                    try {                        
                         labelTexto.setForeground(Color.cyan);
                         gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loadingNuvem.gif")));
                         labelTexto.setText("Captura de dados iniciada...");
+                        aplicacao.aplicacao();
+                        
                     } catch (UnknownHostException ex) {
                         Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (SocketException ex) {
                         Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
                 }
+                
             }, delay, interval);
             
         } catch (java.lang.NumberFormatException ex) {
@@ -146,6 +160,7 @@ public class TelaCaptura extends javax.swing.JFrame {
 
     private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
         timer.cancel();
+        t.cancel();
         
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
 
@@ -157,7 +172,10 @@ public class TelaCaptura extends javax.swing.JFrame {
     }//GEN-LAST:event_bttRetornarActionPerformed
 
     private void bttStopAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStopAppActionPerformed
+        bttStartApp.setEnabled(true);
+        bttStopApp.setEnabled(false);
         timer.cancel();
+        t.cancel();
         labelTexto.setForeground(Color.white);
         gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica.png")));
         labelTexto.setText("Captura de dados encerrada...");

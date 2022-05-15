@@ -70,9 +70,7 @@ public class App {
             disponivelDisk = disponivelDisk.replace("]", "");
             Integer disponivelDisco = Integer.valueOf(disponivelDisk);
             
-            if (totalDisco == 0 && disponivelDisco == 0) {
-                System.out.println("Disco zerado");
-            } else {
+            if (totalDisco != 0 && disponivelDisco != 0) {
                 //BUSCANDO DADOS SOBRE O DISCO ATUAL DO 'FOR'
                 String discoAtual = "disco " + (i + 1);
                 Integer fkComponenteDisco = monitorar.buscarIdComponente(discoAtual, enderecoMac);
@@ -93,6 +91,7 @@ public class App {
                     medidaDisco, unidadeDeMedidaDisco);
 
                 monitorar.incluirMonitoramento(monitoramentoDisco);
+                
             }
             
         }
