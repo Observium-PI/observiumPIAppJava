@@ -57,7 +57,7 @@ public class App {
         List<Object> listaTotalDisco = disco.totalDisco();
         List<Object> listaDisponivelDisco = disco.disponivelDisco();
         
-        for (int i = 0; i < disco.qtdDiscos(); i++) {
+        for (int i = 0; i < listaTotalDisco.size(); i++) {
             //TRANSFORMANDO A LISTA DE OBJETOS EM UMA STRING, RETIRANDO O QUE NÃO
             //É NECESSÁRIO E DEPOIS CONVERTENDO PARA UM NÚMERO INTEIRO
             String totalDisk = String.valueOf(listaTotalDisco.get(i));

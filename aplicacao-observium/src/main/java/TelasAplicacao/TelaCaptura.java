@@ -27,6 +27,8 @@ public class TelaCaptura extends javax.swing.JFrame {
     Timer timer = new Timer();
     Timer t = new Timer();
     
+    Color azulObservium = Color.decode("#2689b9");
+    
     public String login;
     
     /**
@@ -55,16 +57,22 @@ public class TelaCaptura extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        gifCarregando = new javax.swing.JLabel();
         bttRetornar = new javax.swing.JButton();
         bttStopApp = new javax.swing.JButton();
         bttStartApp = new javax.swing.JButton();
-        gifCarregando = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
         labelTexto = new javax.swing.JLabel();
         background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        gifCarregando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica2.png"))); // NOI18N
+        gifCarregando.setToolTipText("");
+        gifCarregando.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(gifCarregando, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 190, 160));
 
         bttRetornar.setBackground(new java.awt.Color(0, 0, 0));
         bttRetornar.setForeground(new java.awt.Color(255, 255, 255));
@@ -96,12 +104,6 @@ public class TelaCaptura extends javax.swing.JFrame {
         });
         getContentPane().add(bttStartApp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 410, 120, 40));
 
-        gifCarregando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica.png"))); // NOI18N
-        gifCarregando.setToolTipText("");
-        gifCarregando.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(gifCarregando, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 190, 160));
-
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
         getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, -1, -1));
 
@@ -128,7 +130,7 @@ public class TelaCaptura extends javax.swing.JFrame {
         t = new Timer();
         
         try {
-            int delay = 0;   // tempo de espera antes da 1ª execução da tarefa.
+            int delay = 2000;   // tempo de espera antes da 1ª execução da tarefa.
             int interval = 3000;  // intervalo no qual a tarefa será executada.
             t.scheduleAtFixedRate(alerta, 0, 60000);
             
@@ -136,8 +138,8 @@ public class TelaCaptura extends javax.swing.JFrame {
                 public void run() {
                     
                     try {                        
-                        labelTexto.setForeground(Color.cyan);
-                        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loadingNuvem.gif")));
+                        labelTexto.setForeground(azulObservium);
+                        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loadingNuvem3.gif")));
                         labelTexto.setText("Captura de dados iniciada...");
                         aplicacao.aplicacao();
                         
@@ -177,7 +179,7 @@ public class TelaCaptura extends javax.swing.JFrame {
         timer.cancel();
         t.cancel();
         labelTexto.setForeground(Color.white);
-        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica.png")));
+        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica2.png")));
         labelTexto.setText("Captura de dados encerrada...");
     }//GEN-LAST:event_bttStopAppActionPerformed
 
