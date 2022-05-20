@@ -1,4 +1,3 @@
-BancoDeDados\ConexaoBancoLocal.class
 TelasAplicacao\TelaCadMaq$1.class
 TelasAplicacao\TelaCaptura$4.class
 Monitoramento\Monitoramento.class
@@ -31,6 +30,8 @@ TelasAplicacao\TelaCaptura$5.class
 TelasAplicacao\TelaHardware$2.class
 AplicacaoTerminal\App$1.class
 TelasAplicacao\TelaFuncMaq$2.class
+.netbeans_automatic_build
+BancoDeDados\ConexaoBanco.class
 Maquina\Maquina.class
 TelasAplicacao\TelaFuncMaq$1.class
 Componentes\Cpu.class

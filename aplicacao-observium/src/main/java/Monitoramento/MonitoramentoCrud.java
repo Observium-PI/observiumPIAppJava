@@ -1,6 +1,6 @@
 package Monitoramento;
 
-import BancoDeDados.ConexaoBancoLocal;
+import BancoDeDados.ConexaoBanco;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import Monitoramento.Monitoramento;
@@ -8,17 +8,26 @@ import java.util.List;
 import java.util.Map;
 
 public class MonitoramentoCrud {
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplateNuvem;
+    private JdbcTemplate jdbcTemplateLocal;
     BasicDataSource dataSource = new BasicDataSource();
-    ConexaoBancoLocal conexao = new ConexaoBancoLocal();
+    ConexaoBanco conexao = new ConexaoBanco();
     
     public MonitoramentoCrud(BasicDataSource dataSource) {
-        jdbcTemplate = conexao.getConexao();
+        //jdbcTemplateNuvem = conexao.getConexaoNuvem();
+        jdbcTemplateLocal = conexao.getConexaoLocal();
     }
     
     //MÉTODO PARA INSERIR O MONITORAMENTO NO BANCO DE DADOS
     public void incluirMonitoramento(Monitoramento novoMonitoramento) {
-        jdbcTemplate.update("insert into Monitoramento (fkComponente, dataHora,"
+        /*jdbcTemplateNuvem.update("insert into Monitoramento (fkComponente, dataHora,"
+                + "medida, unidadeDeMedida) values (?,?,?,?)",
+        novoMonitoramento.getFkComponente(),
+        novoMonitoramento.getDataHora(),
+        novoMonitoramento.getMedida(),
+        novoMonitoramento.getUnidadeDeMedida());*/
+        
+        jdbcTemplateLocal.update("insert into Monitoramento (fkComponente, dataHora,"
                 + "medida, unidadeDeMedida) values (?,?,?,?)",
         novoMonitoramento.getFkComponente(),
         novoMonitoramento.getDataHora(),
@@ -28,8 +37,9 @@ public class MonitoramentoCrud {
     
     //MÉTODO PARA BUSCAR O ID DE UM COMPONENTE UTILIZANDO O TIPO DO COMPONENTE
     //E O ENDEREÇO MAC DO COMPUTADOR
+    //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public Integer buscarIdComponente(String tipoComponente, String endMAC) {
-        List<Map<String, Object>> buscarId = conexao.getConexao().queryForList(
+        List<Map<String, Object>> buscarId = conexao.getConexaoLocal().queryForList(
                 "select idComponente from Componente as C join Computador as PC "
               + "on fkComputador = idComputador where C.tipoComponente = ? "
               + "and PC.endMAC = ?", tipoComponente, endMAC);

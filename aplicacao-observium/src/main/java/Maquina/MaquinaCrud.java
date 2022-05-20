@@ -8,20 +8,32 @@ import java.net.UnknownHostException;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
-import BancoDeDados.ConexaoBancoLocal;
+import BancoDeDados.ConexaoBanco;
 
 public class MaquinaCrud {
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplateNuvem;
+    private JdbcTemplate jdbcTemplateLocal;
     Looca looca = new Looca();
-    ConexaoBancoLocal conexao = new ConexaoBancoLocal();
+    ConexaoBanco conexao = new ConexaoBanco();
     
     public MaquinaCrud(BasicDataSource dataSource) {
-        jdbcTemplate = conexao.getConexao();
+        //jdbcTemplateNuvem = conexao.getConexaoNuvem();
+        jdbcTemplateLocal = conexao.getConexaoLocal();
     }
     
     //METODO PARA INCLUIR APENAS UMA MAQUINA
     public void incluir(Maquina novaMaquina) {
-        jdbcTemplate.update("insert into Computador (hostName, endMac, fabricante, "
+        /*jdbcTemplateNuvem.update("insert into Computador (hostName, endMac, fabricante, "
+                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
+        novaMaquina.getHostName(),
+        novaMaquina.getEndMac(),
+        novaMaquina.getFabricante(),
+        novaMaquina.getArquitetura(),
+        novaMaquina.getSistemaOperacional(),
+        novaMaquina.getLocalidade(),
+        novaMaquina.getFkHospital());*/
+        
+        jdbcTemplateLocal.update("insert into Computador (hostName, endMac, fabricante, "
                 + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
         novaMaquina.getHostName(),
         novaMaquina.getEndMac(),
@@ -30,21 +42,6 @@ public class MaquinaCrud {
         novaMaquina.getSistemaOperacional(),
         novaMaquina.getLocalidade(),
         novaMaquina.getFkHospital());
-    }
-    
-    //METODO PARA INCLUIR MAIS DE UMA MAQUINA
-    //NÃO ESTAMOS UTILIZANDO ESSE MÉTODO NO MOMENTO
-    public void incluirMaquinas(List<Maquina> novasMaquinas) {
-        for (Maquina novasMaquina : novasMaquinas) {
-            jdbcTemplate.update("insert into Computador (endMac, nome, fabricante, "
-                + "arquitetura, sistemaOperacional, fkHospital) values (?,?,?,?,?,?)",
-            novasMaquina.getHostName(),
-            novasMaquina.getEndMac(),
-            novasMaquina.getFabricante(),
-            novasMaquina.getArquitetura(),
-            novasMaquina.getSistemaOperacional(),
-            novasMaquina.getFkHospital());
-        }
     }
     
     //MÉTODO PARA BUSCAR O HOSTNAME DA MÁQUINA

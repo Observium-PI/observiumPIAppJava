@@ -2,14 +2,15 @@ package Monitoramento;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import BancoDeDados.ConexaoBancoLocal;
+import BancoDeDados.ConexaoBanco;
 
 public class Monitoramento {
     private JdbcTemplate jdbcTemplate;
-    ConexaoBancoLocal conexao = new ConexaoBancoLocal();
+    ConexaoBanco conexao = new ConexaoBanco();
     
+    //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public Monitoramento(BasicDataSource dataSource) {
-        jdbcTemplate = conexao.getConexao();
+        jdbcTemplate = conexao.getConexaoLocal();
     }
     
     private Integer fkComponente;

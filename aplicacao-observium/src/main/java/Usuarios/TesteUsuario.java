@@ -1,7 +1,7 @@
 package Usuarios;
 
 import Usuarios.UsuarioCrud;
-import BancoDeDados.ConexaoBancoLocal;
+import BancoDeDados.ConexaoBanco;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 public class TesteUsuario {

@@ -1,6 +1,6 @@
 package Componentes;
 
-import BancoDeDados.ConexaoBancoLocal;
+import BancoDeDados.ConexaoBanco;
 import com.github.britooo.looca.api.core.Looca;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,27 +11,35 @@ import oshi.SystemInfo;
 import java.util.Map;
 
 public class ComponenteCrud {
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplateNuvem;
+    private JdbcTemplate jdbcTemplateLocal;
     Looca looca = new Looca();
     BasicDataSource dataSource = new BasicDataSource();
     HardwareAbstractionLayer hardware = new SystemInfo().getHardware();
-    ConexaoBancoLocal conexao = new ConexaoBancoLocal();
+    ConexaoBanco conexao = new ConexaoBanco();
     
     public ComponenteCrud(BasicDataSource dataSource) {
-        jdbcTemplate = conexao.getConexao();
+        //jdbcTemplateNuvem = conexao.getConexaoNuvem();
+        jdbcTemplateLocal = conexao.getConexaoLocal();
     }
     
     //MÉTODO PARA INCLUIR UM COMPONENTE NA TABELA DO BANCO DE DADOS
     public void incluirComponente(Componente novoComponente) {
-        jdbcTemplate.update("insert into Componente (tipoComponente, fkComputador) "
+        /*jdbcTemplateNuvem.update("insert into Componente (tipoComponente, fkComputador) "
+                + "values (?,?)",
+        novoComponente.getTipoComponente(),
+        novoComponente.getFkComputador());*/
+        
+        jdbcTemplateLocal.update("insert into Componente (tipoComponente, fkComputador) "
                 + "values (?,?)",
         novoComponente.getTipoComponente(),
         novoComponente.getFkComputador());
     }
     
     //MÉTODO PARA BUSCAR O ID DO COMPUTADOR A PARTIR DO HOSTNAME DA MÁQUINA
+    //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public List buscarIdComputador(String hostName) {
-        List<Map<String, Object>> buscaIdComputador = conexao.getConexao().queryForList(
+        List<Map<String, Object>> buscaIdComputador = conexao.getConexaoLocal().queryForList(
                   "select idComputador from Computador where hostName = ?", hostName);
         
         return buscaIdComputador;
