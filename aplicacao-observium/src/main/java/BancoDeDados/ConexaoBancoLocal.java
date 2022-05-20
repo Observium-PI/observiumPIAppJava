@@ -11,8 +11,8 @@ public class ConexaoBancoLocal {
         
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
-        dataSource.setUsername("aluno");
-        dataSource.setPassword("sptech");
+        dataSource.setUsername("root");
+        dataSource.setPassword("Dan-auto85");
         
         conexao = new JdbcTemplate(dataSource);
     }

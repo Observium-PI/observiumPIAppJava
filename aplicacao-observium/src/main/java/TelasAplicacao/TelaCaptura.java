@@ -139,7 +139,7 @@ public class TelaCaptura extends javax.swing.JFrame {
                     
                     try {                        
                         labelTexto.setForeground(azulObservium);
-                        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loadingNuvem3.gif")));
+                        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/loadingNuvem.gif")));
                         labelTexto.setText("Captura de dados iniciada...");
                         aplicacao.aplicacao();
                         

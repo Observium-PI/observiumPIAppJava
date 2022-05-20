@@ -43,8 +43,12 @@ public class App {
         //BUSCANDO DADOS SOBRE A MEMÓRIA
         Integer fkComponenteMemoria = monitorar.buscarIdComponente("memoriaRAM", enderecoMac);
         String dataHoraMemoria = dataFormat.format(LocalDateTime.now());
-        Double medidaMemoria = memoria.memoriaEmUso() / 1000000000;
-        String unidadeDeMedidaMemoria = "GB";
+        Double memoriaTotal = memoria.memoriaTotal();
+        Double memoriaUsoAtual = memoria.memoriaEmUso();
+        
+        Double medidaMemoria = (memoriaUsoAtual * 100) / memoriaTotal;
+        
+        String unidadeDeMedidaMemoria = "%";
         
         //INCLUINDO A DATA E HORA DO MONITORAMENTO, O USO DA MEMÓRIA RAM E SUA
         //UNIDADE DE MEDIDA
