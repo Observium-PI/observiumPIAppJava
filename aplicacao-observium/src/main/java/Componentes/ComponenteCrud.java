@@ -19,27 +19,27 @@ public class ComponenteCrud {
     ConexaoBanco conexao = new ConexaoBanco();
     
     public ComponenteCrud(BasicDataSource dataSource) {
-        //jdbcTemplateNuvem = conexao.getConexaoNuvem();
+        jdbcTemplateNuvem = conexao.getConexaoNuvem();
         jdbcTemplateLocal = conexao.getConexaoLocal();
     }
     
     //MÉTODO PARA INCLUIR UM COMPONENTE NA TABELA DO BANCO DE DADOS
     public void incluirComponente(Componente novoComponente) {
-        /*jdbcTemplateNuvem.update("insert into Componente (tipoComponente, fkComputador) "
-                + "values (?,?)",
-        novoComponente.getTipoComponente(),
-        novoComponente.getFkComputador());*/
-        
-        jdbcTemplateLocal.update("insert into Componente (tipoComponente, fkComputador) "
+        jdbcTemplateNuvem.update("insert into Componente (tipoComponente, fkComputador) "
                 + "values (?,?)",
         novoComponente.getTipoComponente(),
         novoComponente.getFkComputador());
+        
+        /*jdbcTemplateLocal.update("insert into Componente (tipoComponente, fkComputador) "
+                + "values (?,?)",
+        novoComponente.getTipoComponente(),
+        novoComponente.getFkComputador());*/
     }
     
     //MÉTODO PARA BUSCAR O ID DO COMPUTADOR A PARTIR DO HOSTNAME DA MÁQUINA
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public List buscarIdComputador(String hostName) {
-        List<Map<String, Object>> buscaIdComputador = conexao.getConexaoLocal().queryForList(
+        List<Map<String, Object>> buscaIdComputador = conexao.getConexaoNuvem().queryForList(
                   "select idComputador from Computador where hostName = ?", hostName);
         
         return buscaIdComputador;

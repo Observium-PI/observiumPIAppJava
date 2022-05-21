@@ -14,18 +14,18 @@ public class MonitoramentoCrud {
     ConexaoBanco conexao = new ConexaoBanco();
     
     public MonitoramentoCrud(BasicDataSource dataSource) {
-        //jdbcTemplateNuvem = conexao.getConexaoNuvem();
+        jdbcTemplateNuvem = conexao.getConexaoNuvem();
         jdbcTemplateLocal = conexao.getConexaoLocal();
     }
     
     //MÉTODO PARA INSERIR O MONITORAMENTO NO BANCO DE DADOS
     public void incluirMonitoramento(Monitoramento novoMonitoramento) {
-        /*jdbcTemplateNuvem.update("insert into Monitoramento (fkComponente, dataHora,"
+        jdbcTemplateNuvem.update("insert into Monitoramento (fkComponente, dataHora,"
                 + "medida, unidadeDeMedida) values (?,?,?,?)",
         novoMonitoramento.getFkComponente(),
         novoMonitoramento.getDataHora(),
         novoMonitoramento.getMedida(),
-        novoMonitoramento.getUnidadeDeMedida());*/
+        novoMonitoramento.getUnidadeDeMedida());
         
         jdbcTemplateLocal.update("insert into Monitoramento (fkComponente, dataHora,"
                 + "medida, unidadeDeMedida) values (?,?,?,?)",
@@ -39,7 +39,7 @@ public class MonitoramentoCrud {
     //E O ENDEREÇO MAC DO COMPUTADOR
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public Integer buscarIdComponente(String tipoComponente, String endMAC) {
-        List<Map<String, Object>> buscarId = conexao.getConexaoLocal().queryForList(
+        List<Map<String, Object>> buscarId = conexao.getConexaoNuvem().queryForList(
                 "select idComponente from Componente as C join Computador as PC "
               + "on fkComputador = idComputador where C.tipoComponente = ? "
               + "and PC.endMAC = ?", tipoComponente, endMAC);

@@ -17,12 +17,22 @@ public class MaquinaCrud {
     ConexaoBanco conexao = new ConexaoBanco();
     
     public MaquinaCrud(BasicDataSource dataSource) {
-        //jdbcTemplateNuvem = conexao.getConexaoNuvem();
+        jdbcTemplateNuvem = conexao.getConexaoNuvem();
         jdbcTemplateLocal = conexao.getConexaoLocal();
     }
     
     //METODO PARA INCLUIR APENAS UMA MAQUINA
     public void incluir(Maquina novaMaquina) {
+        jdbcTemplateNuvem.update("insert into Computador (hostName, endMac, fabricante, "
+                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
+        novaMaquina.getHostName(),
+        novaMaquina.getEndMac(),
+        novaMaquina.getFabricante(),
+        novaMaquina.getArquitetura(),
+        novaMaquina.getSistemaOperacional(),
+        novaMaquina.getLocalidade(),
+        novaMaquina.getFkHospital());
+        
         /*jdbcTemplateNuvem.update("insert into Computador (hostName, endMac, fabricante, "
                 + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
         novaMaquina.getHostName(),
@@ -32,16 +42,6 @@ public class MaquinaCrud {
         novaMaquina.getSistemaOperacional(),
         novaMaquina.getLocalidade(),
         novaMaquina.getFkHospital());*/
-        
-        jdbcTemplateLocal.update("insert into Computador (hostName, endMac, fabricante, "
-                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
-        novaMaquina.getHostName(),
-        novaMaquina.getEndMac(),
-        novaMaquina.getFabricante(),
-        novaMaquina.getArquitetura(),
-        novaMaquina.getSistemaOperacional(),
-        novaMaquina.getLocalidade(),
-        novaMaquina.getFkHospital());
     }
     
     //MÉTODO PARA BUSCAR O HOSTNAME DA MÁQUINA
