@@ -4,7 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class ConexaoBanco {
-    //private JdbcTemplate conexaoNuvem; //CONEXÃO AZURE
+    private JdbcTemplate conexaoNuvem; //CONEXÃO AZURE
     private JdbcTemplate conexaoLocal; //CONEXÃO MYSQL
 
     public ConexaoBanco() {
@@ -12,7 +12,7 @@ public class ConexaoBanco {
         dev.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dev.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
         dev.setUsername("root");
-        dev.setPassword("Dan-auto85");
+        dev.setPassword("observium123");
         
         BasicDataSource prod = new BasicDataSource();
         prod.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -22,13 +22,13 @@ public class ConexaoBanco {
         prod.setUsername("rootObservium");
         prod.setPassword("2ads$grupo6");
         
-        //conexaoNuvem = new JdbcTemplate(prod);
+        conexaoNuvem = new JdbcTemplate(prod);
         conexaoLocal = new JdbcTemplate(dev);
     }
 
-    /*public JdbcTemplate getConexaoNuvem() {
+    public JdbcTemplate getConexaoNuvem() {
         return conexaoNuvem;
-    }*/
+    }
     
     public JdbcTemplate getConexaoLocal() {
         return conexaoLocal;

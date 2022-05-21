@@ -47,16 +47,16 @@ public class App {
             Menu
          */
         do {
-            System.out.println("\nBem vindo à nossa aplicação. Digite uma tecla p"
-                    + "ara progressuir: \n"
-                    + "1. Inicializar aplicação\n"
-                    + "2. Ver hardware da sua máquina\n"
-                    + "3. Fechar aplicação");
+            System.out.println("\nBem vindo a nossa aplicacao. Digite uma tecla p"
+                    + "ara prosseguir: \n"
+                    + "1. Inicializar aplicacao\n"
+                    + "2. Ver hardware da sua maquina\n"
+                    + "3. Fechar aplicacao");
             Integer opcaoEscolhida = leitorOpcao.nextInt();
 
             switch (opcaoEscolhida) {
                 case 1:
-                    System.out.println("\nDigite seu nome de usuário");
+                    System.out.println("\nDigite seu nome de usuario");
                     String usuario = leitorString.nextLine();
 
                     System.out.println("\nDigite sua senha: ");
@@ -66,7 +66,7 @@ public class App {
                         exited = true;
                         app();
                     } else {
-                        System.out.println("\nUsuário ou senha incorretos.");
+                        System.out.println("\nUsuario ou senha incorretos.");
                     }
 
                     break;
@@ -78,7 +78,7 @@ public class App {
                     exited = sair();
                     break;
                 default:
-                    System.out.println("\nOpção inválida");
+                    System.out.println("\nOpcao invalida");
                     break;
             }
         } while (!exited);
@@ -95,15 +95,15 @@ public class App {
          int interval = 10000;  // intervalo no qual a tarefa será executada.
          
         do {
-            System.out.println(String.format("\n\n\nBem vindo à aplicação, %s!\n"
+            System.out.println(String.format("\n\n\nBem vindo a aplicacao, %s!\n"
                     + "1. Inicializar captura de dados\n"
-                    + "2. Fechar aplicação", nomeUsuario));
+                    + "2. Fechar aplicacao", nomeUsuario));
             Integer opcao = leitorOpcao.nextInt();
 
             switch (opcao) {
                 case 1:   
                     if(verificarSeComputadorEstaCadastrado() == false){
-                        System.out.println("\nMáquina não está cadastrada...");
+                        System.out.println("\nMaquina nao esta cadastrada...");
                         cadastrarMaquina();
                         
                     }else{ 
@@ -123,11 +123,11 @@ public class App {
                     break;
 
                 case 2:
-                    System.out.println("Até mais =D");
+                    System.out.println("Ate mais =D");
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Opção inválida!");
+                    System.out.println("Opcao invalida!");
                     break;
 
             }
@@ -139,7 +139,7 @@ public class App {
        
             
         if (verificarSeComputadorEstaCadastrado()) {
-            System.out.println("\nMáquina já cadastrada! Realize login.");
+            System.out.println("\nMáquina ja cadastrada! Realize login.");
         } else {
             Scanner leitorString = new Scanner(System.in);
 
@@ -162,7 +162,7 @@ public class App {
             // Criando instância do objeto máquina 
             Maquina maquina = new Maquina(hostname, enderecoMAC, fabricante, arquitetura, SO, localidade, hospital);
 
-            System.out.println("\nInicializando cadastro da máquina");
+            System.out.println("\nInicializando cadastro da maquina");
             Thread.sleep(5000);
 
             
@@ -193,7 +193,7 @@ public class App {
                 Componente memoria = new Componente(haveMemoria, idComputadores);
                 componentes.incluirComponente(memoria); //INCLUIR NO BANCO
             } else {
-                System.out.println("Sem memória");
+                System.out.println("Sem memoria");
             }
 
             //INSERINDO DISCOS
@@ -204,7 +204,7 @@ public class App {
                 componentes.incluirComponente(disco); //INCLUIR NO BANCO
             }
 
-            System.out.println("Máquina cadastrada com sucesso!");
+            System.out.println("Maquina cadastrada com sucesso!");
         }
     }
 
@@ -213,15 +213,15 @@ public class App {
 
         do {
             Scanner leitorOpcao = new Scanner(System.in);
-            System.out.println("\nVocê tem certeza que deseja encerrar a apli"
-                    + "cação? \n"
+            System.out.println("\nVoce tem certeza que deseja encerrar a apli"
+                    + "cacao? \n"
                     + "1. Sim\n"
                     + "2. Não");
             Integer opcaoEscolhida = leitorOpcao.nextInt();
 
             switch (opcaoEscolhida) {
                 case 1:
-                    System.out.println("\nEspero te ver novamente por aqui! Até mais"
+                    System.out.println("\nEspero te ver novamente por aqui! Ate mais"
                             + "\n");
                     System.exit(0);
                     return true;
@@ -231,7 +231,7 @@ public class App {
                             + "\n");
                     return false;
                 default:
-                    System.out.println("\nOpção inválida ,tente novamente."
+                    System.out.println("\nOpcao invalida ,tente novamente."
                             + "\n");
             }
         } while (!exited);
@@ -260,7 +260,7 @@ public class App {
 
         //CHAMANDO UM MÉTODO PARA VALIDAR O USUÁRIO QUE ESTÁ TENTANDO LOGAR
         String login = usuarioCRUD.validarUsuario(usuario, senha).toString().replace("[{count(login)=", "");
-        login = login.replace("}, {count(login)=", "");
+        login = login.replace("[{=", "");
         login = login.replace("}]", "");
 
         switch (login) {
@@ -282,7 +282,7 @@ public class App {
         
         do {            
             System.out.println("\nSelecione o seu setor: \n"
-                    + "1. Recepção\n"
+                    + "1. Recepcao\n"
                     + "2. Triagem\n"
                     + "3. Ala médica");
             
@@ -309,8 +309,8 @@ public class App {
     
     public static void getConfiguracoesHardware() throws InterruptedException, UnknownHostException, SocketException{
         
-        System.out.println(String.format("\nConfigurações da sua máquina:"
-                    + "\nEndereço MAC: %s "
+        System.out.println(String.format("\nConfiguracoes da sua maquina:"
+                    + "\nEndereco MAC: %s "
                     + "\nFabricante: %s"
                     + "\nHostname: %s"
                     + "\nArquitetura: %s bits"

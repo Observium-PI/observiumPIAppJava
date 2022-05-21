@@ -16,7 +16,7 @@ public class UsuarioCrud {
     
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public UsuarioCrud(BasicDataSource dataSource) {
-        jdbcTemplate = conexao.getConexaoLocal();
+        jdbcTemplate = conexao.getConexaoNuvem();
     }
 
     public UsuarioCrud(String usuario) {
@@ -26,7 +26,7 @@ public class UsuarioCrud {
     //MÉTODO PARA VALIDAR O LOGIN DO USUÁRIO
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public List validarUsuario(String login, String senha) {
-        List<Map<String, Object>> buscaUsuario = conexao.getConexaoLocal().queryForList(
+        List<Map<String, Object>> buscaUsuario = conexao.getConexaoNuvem().queryForList(
                   "select count(login) from Usuario where login = ? "
                           + "and senha = ?", login, senha);
         
@@ -36,7 +36,7 @@ public class UsuarioCrud {
     //MÉTODO PARA BUSCAR O NOME DO USUÁRIO LOGADO A PARTIR DO CÓDIGO DE LOGIN
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public String buscarNomeUsuario(String usuario) {
-        List<Map<String, Object>> nameUsuario = conexao.getConexaoLocal().queryForList(
+        List<Map<String, Object>> nameUsuario = conexao.getConexaoNuvem().queryForList(
                   "select nome from Usuario where login = ?", usuario);
         
         Object nomeUser = nameUsuario;
@@ -53,7 +53,7 @@ public class UsuarioCrud {
     //MÉTODO PARA BUSCAR O ID DO HOSPITAL DO USUÁRIO LOGADO
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public List buscarIdHospital(String login) {
-        List<Map<String, Object>> buscaIdHospital = conexao.getConexaoLocal().queryForList(
+        List<Map<String, Object>> buscaIdHospital = conexao.getConexaoNuvem().queryForList(
                   "select fkHospital from Usuario where login = ?", login);
         
         return buscaIdHospital;
