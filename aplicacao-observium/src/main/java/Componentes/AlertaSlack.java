@@ -168,8 +168,15 @@ public class AlertaSlack extends TimerTask {
             DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             String dataHora = dataFormat.format(LocalDateTime.now());
 
+            //formatando o tipo do componente para fazer o select certo
+            if (tipoComponente == "RAM") {
+                tipoComponente = "memoriaRAM";
+            } else if (tipoComponente == "DISCO") {
+                tipoComponente = "disco";
+            }
+
             //registra o alerta na tabela Historico
-            alerta.resgatarIdMonitoramento(msg, hostname, dataHora);
+            alerta.resgatarIdMonitoramento(msg, hostname, dataHora, tipoComponente);
 
             msg += "\nData do ocorrido: " + dataHora;
             String sistemaOperacional = looca.getSistema().getSistemaOperacional();

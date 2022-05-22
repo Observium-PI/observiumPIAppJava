@@ -14,19 +14,18 @@ public class AlertaSlackCrud {
     private JdbcTemplate jdbcTemplateLocal;
     BasicDataSource dataSource = new BasicDataSource();
     ConexaoBanco conexao = new ConexaoBanco();
-    
 
     public AlertaSlackCrud(BasicDataSource dataSource) {
         jdbcTemplateNuvem = conexao.getConexaoNuvem();
         jdbcTemplateLocal = conexao.getConexaoLocal();
     }
 
-    public void resgatarIdMonitoramento(String msg, String hostname, String dataHora) {
+    public void resgatarIdMonitoramento(String msg, String hostname, String dataHora,String tipoComponente) {
         List<Map<String, Object>> buscarId = conexao.getConexaoNuvem().queryForList(
                 "select top 1 idMonitoramento from monitoramento inner join componente"
                 + " on fkComponente = idComponente inner join computador on "
-                + "fkComputador = idComputador where hostname = ? order by "
-                + "dataHora desc", hostname);
+                + "fkComputador = idComputador where hostname = ? and"
+                + " tipoComponente like ? order by dataHora desc", hostname,tipoComponente+"%");
 
         Object id = buscarId;
 
