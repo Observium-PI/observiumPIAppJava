@@ -12,7 +12,7 @@ public class ConexaoBanco {
         dev.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dev.setUrl("jdbc:mysql://localhost:3306/Observium?serverTimezone=UTC");
         dev.setUsername("root");
-        dev.setPassword("");
+        dev.setPassword("observium123");
         
         BasicDataSource prod = new BasicDataSource();
         prod.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

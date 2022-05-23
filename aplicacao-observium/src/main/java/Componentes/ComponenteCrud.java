@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class ComponenteCrud {
     private JdbcTemplate jdbcTemplateNuvem;
+    
     private JdbcTemplate jdbcTemplateLocal;
     Looca looca = new Looca();
     BasicDataSource dataSource = new BasicDataSource();
@@ -24,22 +25,35 @@ public class ComponenteCrud {
     }
     
     //MÉTODO PARA INCLUIR UM COMPONENTE NA TABELA DO BANCO DE DADOS
-    public void incluirComponente(Componente novoComponente) {
+    public void incluirComponenteNuvem(Componente novoComponente) {
         jdbcTemplateNuvem.update("insert into Componente (tipoComponente, fkComputador) "
                 + "values (?,?)",
         novoComponente.getTipoComponente(),
         novoComponente.getFkComputador());
         
-        /*jdbcTemplateLocal.update("insert into Componente (tipoComponente, fkComputador) "
+      
+    }
+    
+    public void incluirComponenteLocal(Componente novoComponente) {
+          jdbcTemplateLocal.update("insert into Componente (tipoComponente, fkComputador) "
                 + "values (?,?)",
         novoComponente.getTipoComponente(),
-        novoComponente.getFkComputador());*/
+        novoComponente.getFkComputador());
     }
+    
+    
     
     //MÉTODO PARA BUSCAR O ID DO COMPUTADOR A PARTIR DO HOSTNAME DA MÁQUINA
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
-    public List buscarIdComputador(String hostName) {
+    public List buscarIdComputadorNuvem(String hostName) {
         List<Map<String, Object>> buscaIdComputador = conexao.getConexaoNuvem().queryForList(
+                  "select idComputador from Computador where hostName = ?", hostName);
+        
+        return buscaIdComputador;
+    }
+    
+    public List buscarIdComputadorLocal(String hostName) {
+        List<Map<String, Object>> buscaIdComputador = conexao.getConexaoLocal().queryForList(
                   "select idComputador from Computador where hostName = ?", hostName);
         
         return buscaIdComputador;

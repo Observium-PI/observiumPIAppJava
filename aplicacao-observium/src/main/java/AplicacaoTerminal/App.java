@@ -174,34 +174,64 @@ public class App {
             ComponenteCrud componentes = new ComponenteCrud(dataSource);
 
             //BUSCANDO ID DO COMPUTADOR CADASTRADO
-            List idPc = componentes.buscarIdComputador(hostname);
-            String idMaquina = String.valueOf(idPc);
-            idMaquina = idMaquina.replace("[{idComputador=", "");
-            idMaquina = idMaquina.replace("}]", "");
+            List idPcNuvem = componentes.buscarIdComputadorNuvem(hostname);
+            List idPcLocal = componentes.buscarIdComputadorLocal(hostname);
+            
+            String idMaquinaNuvem = String.valueOf(idPcNuvem);
+            String idMaquinaLocal = String.valueOf(idPcLocal);
+            
+            idMaquinaNuvem = idMaquinaNuvem.replace("[{idComputador=", "");
+            idMaquinaNuvem = idMaquinaNuvem.replace("}]", "");
+            
+            idMaquinaLocal = idMaquinaLocal.replace("[{idComputador=", "");
+            idMaquinaLocal = idMaquinaLocal.replace("}]", "");
 
-            Integer idComputadores = Integer.valueOf(idMaquina);
+            Integer idComputadoresNuvem = Integer.valueOf(idMaquinaNuvem);
+            Integer idComputadoresLocal = Integer.valueOf(idMaquinaLocal);
 
             String haveCpu = componentes.buscarCpuComponente();
             String haveMemoria = componentes.buscarMemoriaComponente();
 
-            //INSERINDO CPU
-            Componente cpu = new Componente(haveCpu, idComputadores);
-            componentes.incluirComponente(cpu); //INCLUIR NO BANCO
+            //INSERINDO CPU na nuvem
+            Componente cpuNuvem = new Componente(haveCpu, idComputadoresNuvem);
+            Componente cpuLocal = new Componente(haveCpu, idComputadoresLocal);
+            
+            // INSERINDO CPU na nuvem
+            componentes.incluirComponenteNuvem(cpuNuvem); //INCLUIR NO BANCO
+            //INSERINDO CPU no local
+            componentes.incluirComponenteLocal(cpuLocal); //INCLUIR NO BANCO
+            
+            
 
-            //INSERINDO MEMÓRIA
+            //INSERINDO MEMÓRIA NA NUVEM
             if (haveMemoria != null) {
-                Componente memoria = new Componente(haveMemoria, idComputadores);
-                componentes.incluirComponente(memoria); //INCLUIR NO BANCO
+                Componente memoria = new Componente(haveMemoria, idComputadoresNuvem);
+                componentes.incluirComponenteNuvem(memoria); //INCLUIR NO BANCO
             } else {
                 System.out.println("Sem memoria");
             }
+            
+            //INSERINDO MEMÓRIA NO NUVEM
+            if (haveMemoria != null) {
+                Componente memoria = new Componente(haveMemoria, idComputadoresLocal);
+                componentes.incluirComponenteLocal(memoria); //INCLUIR NO BANCO
+            } else {
+                System.out.println("Sem memoria");
+            }
+            
+           
 
             //INSERINDO DISCOS
             Integer haveDisco = componentes.buscarVolumesComponente();
 
             for (int i = 0; i < haveDisco; i++) {
-                Componente disco = new Componente("disco " + (i + 1), idComputadores);
-                componentes.incluirComponente(disco); //INCLUIR NO BANCO
+                Componente disco = new Componente("disco " + (i + 1), idComputadoresNuvem);
+                componentes.incluirComponenteNuvem(disco); //INCLUIR NO BANCO
+            }
+            
+            for (int i = 0; i < haveDisco; i++) {
+                Componente disco = new Componente("disco " + (i + 1), idComputadoresLocal);
+                componentes.incluirComponenteLocal(disco); //INCLUIR NO BANCO
             }
 
             System.out.println("Maquina cadastrada com sucesso!");
@@ -245,8 +275,11 @@ public class App {
         String hostname = maquinaCRUD.buscarHostName();
         ComponenteCrud compCRUD = new ComponenteCrud(dataSource);
 
-        if (compCRUD.buscarIdComputador(hostname).size() != 0) {
-            return true;
+        if (compCRUD.buscarIdComputadorNuvem(hostname).size() != 0) {
+            if(compCRUD.buscarIdComputadorLocal(hostname).size() != 0){
+                 return true;
+            }
+           return false;
         } else {
             return false;
         }

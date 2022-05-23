@@ -42,16 +42,7 @@ public class MaquinaCrud {
         novaMaquina.getSistemaOperacional(),
         novaMaquina.getLocalidade(),
         novaMaquina.getFkHospital());
-        
-        /*jdbcTemplateNuvem.update("insert into Computador (hostName, endMac, fabricante, "
-                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
-        novaMaquina.getHostName(),
-        novaMaquina.getEndMac(),
-        novaMaquina.getFabricante(),
-        novaMaquina.getArquitetura(),
-        novaMaquina.getSistemaOperacional(),
-        novaMaquina.getLocalidade(),
-        novaMaquina.getFkHospital());*/
+
     }
     
     //MÉTODO PARA BUSCAR O HOSTNAME DA MÁQUINA

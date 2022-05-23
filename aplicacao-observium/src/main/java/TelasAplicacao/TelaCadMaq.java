@@ -178,7 +178,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
                 ComponenteCrud componentes = new ComponenteCrud(dataSource);
 
                 //BUSCANDO ID DO COMPUTADOR CADASTRADO
-                List idPc = componentes.buscarIdComputador(hostName);
+                List idPc = componentes.buscarIdComputadorNuvem(hostName);
                 String idMaquina = String.valueOf(idPc);
                 idMaquina = idMaquina.replace("[{idComputador=", "");
                 idMaquina = idMaquina.replace("}]", "");
@@ -190,12 +190,12 @@ public class TelaCadMaq extends javax.swing.JFrame {
 
                 //INSERINDO CPU
                 Componente cpu = new Componente(haveCpu, idComputadores);
-                componentes.incluirComponente(cpu); //INCLUIR NO BANCO
+                componentes.incluirComponenteNuvem(cpu); //INCLUIR NO BANCO
 
                 //INSERINDO MEMÓRIA
                 if (haveMemoria != null) {
                     Componente memoria = new Componente(haveMemoria, idComputadores);
-                    componentes.incluirComponente(memoria); //INCLUIR NO BANCO
+                    componentes.incluirComponenteNuvem(memoria); //INCLUIR NO BANCO
                 } else {
                     System.out.println("Sem memória");
                 }
@@ -205,7 +205,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
 
                 for (int i = 0; i < haveDisco; i++) {
                     Componente disco = new Componente("disco " + (i + 1), idComputadores);
-                    componentes.incluirComponente(disco); //INCLUIR NO BANCO
+                    componentes.incluirComponenteNuvem(disco); //INCLUIR NO BANCO
                 }
                 
                 JOptionPane.showMessageDialog(this, "Máquina cadastrada com sucesso!");
