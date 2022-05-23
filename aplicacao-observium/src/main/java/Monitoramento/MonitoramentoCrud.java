@@ -18,7 +18,7 @@ public class MonitoramentoCrud {
         jdbcTemplateLocal = conexao.getConexaoLocal();
     }
     
-    //MÉTODO PARA INSERIR O MONITORAMENTO NO BANCO DE DADOS
+    //MÉTODO PARA INSERIR O MONITORAMENTO NO BANCO DE DADOS NA NUVEM
     public void incluirMonitoramentoNuvem(Monitoramento novoMonitoramento) {
         jdbcTemplateNuvem.update("insert into Monitoramento (fkComponente, dataHora,"
                 + "medida, unidadeDeMedida) values (?,?,?,?)",
@@ -28,6 +28,7 @@ public class MonitoramentoCrud {
         novoMonitoramento.getUnidadeDeMedida());
     }
     
+    // MÉTODO PARA INSERIR O MONITORAMENTO NO BD LOCAL
     public void incluirMonitoramentoLocal(Monitoramento novoMonitoramento){
         jdbcTemplateLocal.update("insert into Monitoramento (fkComponente, dataHora,"
                 + "medida, unidadeDeMedida) values (?,?,?,?)",
@@ -39,7 +40,6 @@ public class MonitoramentoCrud {
     
     //MÉTODO PARA BUSCAR O ID DE UM COMPONENTE UTILIZANDO O TIPO DO COMPONENTE
     //E O ENDEREÇO MAC DO COMPUTADOR
-    //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
     public Integer buscarIdComponenteNuvem(String tipoComponente, String endMAC) {
         List<Map<String, Object>> buscarId = conexao.getConexaoNuvem().queryForList(
                 "select idComponente from Componente as C join Computador as PC "
@@ -59,6 +59,7 @@ public class MonitoramentoCrud {
         return idComponente;
     }
     
+    //MÉTODO PARA BUSCAR ID DE COMPONENTE NO BANCO LOCAL
     public Integer buscarIdComponenteLocal(String tipoComponente, String endMAC) {
         List<Map<String, Object>> buscarId = conexao.getConexaoLocal().queryForList(
                 "select idComponente from Componente as C join Computador as PC "

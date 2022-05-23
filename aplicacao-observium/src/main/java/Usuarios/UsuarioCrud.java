@@ -1,6 +1,7 @@
 package Usuarios;
 
 import BancoDeDados.ConexaoBanco;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -30,7 +31,75 @@ public class UsuarioCrud {
                   "select count(login) from Usuario where login = ? "
                           + "and senha = ?", login, senha);
         
+        
+        
         return buscaUsuario;
+    }
+    
+    public List inserindoUsuarioNoLocal(String login){
+        List<String> lista = new ArrayList<>();
+        
+        List<Map<String, Object>> buscaId = conexao.getConexaoNuvem().queryForList(
+                  "select idUsuario from Usuario where login = ? "
+                         , login);
+        
+        String idUsuario = String.valueOf(buscaId);
+        idUsuario = idUsuario.replace("[{idUsuario=", "");
+        idUsuario = idUsuario.replace("}]", "");
+        lista.add(idUsuario);
+        
+        
+        List<Map<String, Object>> buscaNome = conexao.getConexaoNuvem().queryForList(
+                  "select nome from Usuario where login = ? "
+                         , login);
+        
+        String nomeUsuario = String.valueOf(buscaNome);
+        nomeUsuario = nomeUsuario.replace("[{nome=", "");
+        nomeUsuario = nomeUsuario.replace("}]", "");
+        lista.add(nomeUsuario);
+        
+        List<Map<String, Object>> buscaEmail = conexao.getConexaoNuvem().queryForList(
+                  "select email from Usuario where login = ? "
+                         , login);
+        
+        String emailUsuario = String.valueOf(buscaEmail);
+        emailUsuario = emailUsuario.replace("[{email=", "");
+        emailUsuario = emailUsuario.replace("}]", "");
+        lista.add(emailUsuario);
+        
+        List<Map<String, Object>> buscaSetor = conexao.getConexaoNuvem().queryForList(
+                  "select setor from Usuario where login = ? "
+                         , login);
+        
+        String setorUsuario = String.valueOf(buscaSetor);
+        setorUsuario = setorUsuario.replace("[{setor=", "");
+        setorUsuario = setorUsuario.replace("}]", "");
+        lista.add(setorUsuario);
+        
+        List<Map<String, Object>> buscaTipoUsuario = conexao.getConexaoNuvem().queryForList(
+                  "select tipoUsuario from Usuario where login = ? "
+                         , login);
+        
+        String tipoUsuario = String.valueOf(buscaTipoUsuario);
+        tipoUsuario = tipoUsuario.replace("[{tipoUsuario=", "");
+        tipoUsuario = tipoUsuario.replace("}]", "");
+        lista.add(tipoUsuario);
+        
+        List<Map<String, Object>> buscaFkHospital = conexao.getConexaoNuvem().queryForList(
+                  "select fkHospital from Usuario where login = ? "
+                         , login);
+        
+        String fkHospital = String.valueOf(buscaFkHospital);
+        fkHospital = fkHospital.replace("[{fkHospital=", "");
+        fkHospital = fkHospital.replace("}]", "");
+        lista.add(fkHospital);
+        
+        return lista;
+        
+        
+        
+        
+   
     }
     
     //MÉTODO PARA BUSCAR O NOME DO USUÁRIO LOGADO A PARTIR DO CÓDIGO DE LOGIN
@@ -52,8 +121,15 @@ public class UsuarioCrud {
     
     //MÉTODO PARA BUSCAR O ID DO HOSPITAL DO USUÁRIO LOGADO
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
-    public List buscarIdHospital(String login) {
+    public List buscarIdHospitalNuvem(String login) {
         List<Map<String, Object>> buscaIdHospital = conexao.getConexaoNuvem().queryForList(
+                  "select fkHospital from Usuario where login = ?", login);
+        
+        return buscaIdHospital;
+    }
+    
+    public List buscarIdHospitalLocal(String login) {
+        List<Map<String, Object>> buscaIdHospital = conexao.getConexaoLocal().queryForList(
                   "select fkHospital from Usuario where login = ?", login);
         
         return buscaIdHospital;

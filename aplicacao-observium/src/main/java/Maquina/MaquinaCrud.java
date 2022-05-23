@@ -22,18 +22,8 @@ public class MaquinaCrud {
     }
     
     //METODO PARA INCLUIR APENAS UMA MAQUINA
-    public void incluir(Maquina novaMaquina) {
-        jdbcTemplateLocal.update("insert into Computador (hostName, endMac, fabricante, "
-                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
-        novaMaquina.getHostName(),
-        novaMaquina.getEndMac(),
-        novaMaquina.getFabricante(),
-        novaMaquina.getArquitetura(),
-        novaMaquina.getSistemaOperacional(),
-        novaMaquina.getLocalidade(),
-        novaMaquina.getFkHospital());
-        
-        jdbcTemplateNuvem.update("insert into Computador (hostName, endMac, fabricante, "
+    public void incluirNuvem(Maquina novaMaquina) {
+        jdbcTemplateNuvem.update("insert into Computador (hostname, endMac, fabricante, "
                 + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
         novaMaquina.getHostName(),
         novaMaquina.getEndMac(),
@@ -43,6 +33,19 @@ public class MaquinaCrud {
         novaMaquina.getLocalidade(),
         novaMaquina.getFkHospital());
 
+    }
+    
+    //MÉTODO PARA INCLUIR APENAS UMA MÁQUINA NO LOCAL
+    public void incluirLocal(Maquina novaMaquina){
+        jdbcTemplateLocal.update("insert into Computador (hostname, endMac, fabricante, "
+                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
+        novaMaquina.getHostName(),
+        novaMaquina.getEndMac(),
+        novaMaquina.getFabricante(),
+        novaMaquina.getArquitetura(),
+        novaMaquina.getSistemaOperacional(),
+        novaMaquina.getLocalidade(),
+        novaMaquina.getFkHospital());
     }
     
     //MÉTODO PARA BUSCAR O HOSTNAME DA MÁQUINA

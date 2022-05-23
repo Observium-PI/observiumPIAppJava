@@ -152,7 +152,7 @@ public class App {
             // Mudar essa localidade
             String localidade = menuLocalidade();
             // Mudar o hospital
-            String hospitalString = usuarioCRUD.buscarIdHospital(usuarioLogin).get(0).toString();
+            String hospitalString = usuarioCRUD.buscarIdHospitalLocal(usuarioLogin).get(0).toString();
             String resultado = "";
             resultado = hospitalString.replace("{", "");
             resultado = resultado.replace("}", "");
@@ -167,7 +167,8 @@ public class App {
 
             
 
-            maquinaCRUD.incluir(maquina);
+            maquinaCRUD.incluirNuvem(maquina);
+            maquinaCRUD.incluirLocal(maquina);
 
             // Inserindo componentes
             //========================COMPONENTES===========================

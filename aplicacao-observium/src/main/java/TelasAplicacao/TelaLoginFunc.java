@@ -114,6 +114,8 @@ public class TelaLoginFunc extends javax.swing.JFrame {
                 String nome = usuario.buscarNomeUsuario(usuarioLogin);
                 usuario.setUsuario(nome);
                 TelaFuncMaq registro = new TelaFuncMaq(usuario);
+                // Inserindo os dados do usuário que acabou de logar no banco de dados local
+                usuario.inserindoUsuarioNoLocal(usuarioLogin);
                 this.dispose();
                 registro.setVisible(true);
                 break;

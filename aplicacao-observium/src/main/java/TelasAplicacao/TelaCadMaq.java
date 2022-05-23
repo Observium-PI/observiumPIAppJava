@@ -160,7 +160,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
             }
             
             //BUSCANDO O ID DO HOSPITAL DO USUÁRIO LOGADO PARA CADASTRAR A MÁQUINA
-            List idHosp = usuario.buscarIdHospital(login);
+            List idHosp = usuario.buscarIdHospitalNuvem(login);
             String idHospital = String.valueOf(idHosp);
             idHospital = idHospital.replace("[{fkHospital=", "");
             idHospital = idHospital.replace("}]", "");
@@ -172,30 +172,44 @@ public class TelaCadMaq extends javax.swing.JFrame {
                 Maquina maquina = new Maquina(hostName, endMac, fabricante,
                     arquitetura, sistemaOperacional, localidade, fkHospital);
 
-                computador.incluir(maquina); //INCLUIR NO BANCO
+                computador.incluirNuvem(maquina); //INCLUIR NO BANCO
+                computador.incluirLocal(maquina); //INCLUIR NO BANCO
 
                 //========================COMPONENTES===========================
                 ComponenteCrud componentes = new ComponenteCrud(dataSource);
 
                 //BUSCANDO ID DO COMPUTADOR CADASTRADO
-                List idPc = componentes.buscarIdComputadorNuvem(hostName);
-                String idMaquina = String.valueOf(idPc);
-                idMaquina = idMaquina.replace("[{idComputador=", "");
-                idMaquina = idMaquina.replace("}]", "");
+                List idPcNuvem = componentes.buscarIdComputadorNuvem(hostName);
+                String idMaquinaNuvem = String.valueOf(idPcNuvem);
+                idMaquinaNuvem = idMaquinaNuvem.replace("[{idComputador=", "");
+                idMaquinaNuvem = idMaquinaNuvem.replace("}]", "");
+                
+                List idPcLocal = componentes.buscarIdComputadorLocal(hostName);
+                String idMaquinaLocal = String.valueOf(idPcLocal);
+                idMaquinaLocal = idMaquinaLocal.replace("[{idComputador=", "");
+                idMaquinaLocal = idMaquinaLocal.replace("}]", "");
 
-                Integer idComputadores = Integer.valueOf(idMaquina);
+                Integer idComputadoresNuvem = Integer.valueOf(idMaquinaNuvem);
+                Integer idComputadoresLocal = Integer.valueOf(idMaquinaLocal);
 
                 String haveCpu = componentes.buscarCpuComponente();
                 String haveMemoria = componentes.buscarMemoriaComponente();
 
-                //INSERINDO CPU
-                Componente cpu = new Componente(haveCpu, idComputadores);
-                componentes.incluirComponenteNuvem(cpu); //INCLUIR NO BANCO
+                //INSERINDO CPU NA NUVEM
+                Componente cpuNuvem = new Componente(haveCpu, idComputadoresNuvem);
+                componentes.incluirComponenteNuvem(cpuNuvem); //INCLUIR NO BANCO
+                
+                //INSERINDO CPU NO LOCAL
+                Componente cpuLocal = new Componente(haveCpu, idComputadoresLocal);
+                componentes.incluirComponenteLocal(cpuLocal); //INCLUIR NO BANCO
 
                 //INSERINDO MEMÓRIA
                 if (haveMemoria != null) {
-                    Componente memoria = new Componente(haveMemoria, idComputadores);
-                    componentes.incluirComponenteNuvem(memoria); //INCLUIR NO BANCO
+                    Componente memoriaNuvem = new Componente(haveMemoria, idComputadoresNuvem);
+                    componentes.incluirComponenteNuvem(memoriaNuvem); //INCLUIR NO BANCO NA NUVEM
+                    
+                    Componente memoriaLocal = new Componente(haveMemoria, idComputadoresLocal);
+                    componentes.incluirComponenteNuvem(memoriaLocal); //INCLUIR NO BANCO NO LOCAL
                 } else {
                     System.out.println("Sem memória");
                 }
@@ -204,7 +218,12 @@ public class TelaCadMaq extends javax.swing.JFrame {
                 Integer haveDisco = componentes.buscarVolumesComponente();
 
                 for (int i = 0; i < haveDisco; i++) {
-                    Componente disco = new Componente("disco " + (i + 1), idComputadores);
+                    Componente disco = new Componente("disco " + (i + 1), idComputadoresNuvem);
+                    componentes.incluirComponenteNuvem(disco); //INCLUIR NO BANCO
+                }
+                
+                for (int i = 0; i < haveDisco; i++) {
+                    Componente disco = new Componente("disco " + (i + 1), idComputadoresLocal);
                     componentes.incluirComponenteNuvem(disco); //INCLUIR NO BANCO
                 }
                 
