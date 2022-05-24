@@ -1,11 +1,15 @@
 package TelasAplicacao;
 
+import BancoDeDados.ConexaoBanco;
 import Usuarios.UsuarioCrud;
 import org.apache.commons.dbcp2.BasicDataSource;
 import TelasAplicacao.TelaFuncMaq;
 import java.awt.Color;
+import java.util.List;
 
 public class TelaLoginFunc extends javax.swing.JFrame {
+    
+     ConexaoBanco conexao = new ConexaoBanco();
 
     /**
      * Creates new form TelaLoginFunc
@@ -115,7 +119,19 @@ public class TelaLoginFunc extends javax.swing.JFrame {
                 usuario.setUsuario(nome);
                 TelaFuncMaq registro = new TelaFuncMaq(usuario);
                 // Inserindo os dados do usuário que acabou de logar no banco de dados local
-                usuario.inserindoUsuarioNoLocal(usuarioLogin);
+                List<String> dadosUsuario = usuario.inserindoUsuarioNoLocal(usuarioLogin);
+                Integer id = Integer.valueOf(dadosUsuario.get(0));
+                String email = dadosUsuario.get(2);
+                String setor = dadosUsuario.get(3);
+                String tipoUsuario = dadosUsuario.get(4);
+                String fkHospital = dadosUsuario.get(5);
+               conexao.getConexaoLocal().update("Insert into Usuario (nome, email, setor, tipoUsuario, login, senha, fkHospital) "
+                       + "values (?, ?, ?, ?, ?, ?, ?)",
+                       nome, email, setor, tipoUsuario, usuarioLogin, usuarioSenha, fkHospital);
+                
+                
+                
+                
                 this.dispose();
                 registro.setVisible(true);
                 break;

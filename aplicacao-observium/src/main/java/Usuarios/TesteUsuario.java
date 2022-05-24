@@ -10,6 +10,6 @@ public class TesteUsuario {
         
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
         
-        System.out.println(usuario.inserindoUsuarioNoLocal("SADA"));
+        System.out.println(usuario.inserindoUsuarioNoLocal("MARCOLI"));
     }
 }

@@ -1,5 +1,6 @@
 package AplicacaoTerminal;
 
+import BancoDeDados.ConexaoBanco;
 import Componentes.AlertaSlack;
 import Componentes.Componente;
 import Componentes.ComponenteCrud;
@@ -301,6 +302,18 @@ public class App {
             case "1":
                 usuarioLogin = usuario;
                 nomeUsuario = usuarioCRUD.buscarNomeUsuario(usuario);
+                ConexaoBanco conexao = new ConexaoBanco();
+                
+                // Inserindo o usuário no local
+                List<String> dadosUsuario = usuarioCRUD.inserindoUsuarioNoLocal(usuarioLogin);
+                Integer id = Integer.valueOf(dadosUsuario.get(0));
+                String email = dadosUsuario.get(2);
+                String setor = dadosUsuario.get(3);
+                String tipoUsuario = dadosUsuario.get(4);
+                String fkHospital = dadosUsuario.get(5);
+               conexao.getConexaoLocal().update("Insert into Usuario (nome, email, setor, tipoUsuario, login, senha, fkHospital) "
+                       + "values (?, ?, ?, ?, ?, ?, ?)",
+                       nomeUsuario, email, setor, tipoUsuario, usuarioLogin, senha, fkHospital);
                 return true;
 
             default:

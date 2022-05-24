@@ -14,15 +14,15 @@ public class ConexaoBanco {
         dev.setUsername("root");
         dev.setPassword("Observium123");
         
-//        BasicDataSource prod = new BasicDataSource();
-//        prod.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//        prod.setUrl("jdbc:sqlserver://bdobservium.database.windows.net;"
-//                + "database=bd-observium;encrypt=true;trustCertificate=false;"
-//                + "hostNameInCertificate=*.database.windows.net");
-//        prod.setUsername("rootObservium");
-//        prod.setPassword("2ads$grupo6");
-//        
-        //conexaoNuvem = new JdbcTemplate(prod);
+       BasicDataSource prod = new BasicDataSource();
+       prod.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+       prod.setUrl("jdbc:sqlserver://bdobservium.database.windows.net;"
+               + "database=bd-observium;encrypt=true;trustCertificate=false;"
+               + "hostNameInCertificate=*.database.windows.net");
+       prod.setUsername("rootObservium");
+        prod.setPassword("2ads$grupo6");
+        
+        conexaoNuvem = new JdbcTemplate(prod);
         conexaoLocal = new JdbcTemplate(dev);
     }
 

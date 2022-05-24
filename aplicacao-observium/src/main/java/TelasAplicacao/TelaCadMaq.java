@@ -209,7 +209,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
                     componentes.incluirComponenteNuvem(memoriaNuvem); //INCLUIR NO BANCO NA NUVEM
                     
                     Componente memoriaLocal = new Componente(haveMemoria, idComputadoresLocal);
-                    componentes.incluirComponenteNuvem(memoriaLocal); //INCLUIR NO BANCO NO LOCAL
+                    componentes.incluirComponenteLocal(memoriaLocal); //INCLUIR NO BANCO NO LOCAL
                 } else {
                     System.out.println("Sem memória");
                 }
@@ -224,7 +224,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
                 
                 for (int i = 0; i < haveDisco; i++) {
                     Componente disco = new Componente("disco " + (i + 1), idComputadoresLocal);
-                    componentes.incluirComponenteNuvem(disco); //INCLUIR NO BANCO
+                    componentes.incluirComponenteLocal(disco); //INCLUIR NO BANCO
                 }
                 
                 JOptionPane.showMessageDialog(this, "Máquina cadastrada com sucesso!");

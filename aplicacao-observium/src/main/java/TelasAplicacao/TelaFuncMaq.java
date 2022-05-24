@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -162,15 +163,28 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
-        BasicDataSource dataSource = new BasicDataSource();
-
+        try {
+            if(!verificarSeComputadorEstaCadastrado()){
+            BasicDataSource dataSource = new BasicDataSource();
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
-        
         String nomeUsuario = usuario.buscarNomeUsuario(login);
         usuario.setUsuario(nomeUsuario);
         TelaCadMaq cadastroMaq = new TelaCadMaq(usuario);
         this.dispose();
         cadastroMaq.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Máquina já cadastrada!");
+        }
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SocketException ex) {
+            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
     }//GEN-LAST:event_bttCadastrarActionPerformed
 
     private void bttStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStartActionPerformed
@@ -242,6 +256,23 @@ public class TelaFuncMaq extends javax.swing.JFrame {
                 new TelaFuncMaq().setVisible(true);
             }
         });
+    }
+    
+    public static Boolean verificarSeComputadorEstaCadastrado() throws InterruptedException, UnknownHostException, SocketException {
+        BasicDataSource dataSource = new BasicDataSource();
+        MaquinaCrud maquinaCRUD = new MaquinaCrud(dataSource);
+        String hostname = maquinaCRUD.buscarHostName();
+        ComponenteCrud compCRUD = new ComponenteCrud(dataSource);
+
+        if (compCRUD.buscarIdComputadorNuvem(hostname).size() != 0) {
+            if(compCRUD.buscarIdComputadorLocal(hostname).size() != 0){
+                 return true;
+            }
+           return false;
+        } else {
+            return false;
+        }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
