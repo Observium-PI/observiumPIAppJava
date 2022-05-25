@@ -10,16 +10,16 @@ public class ConexaoBanco {
     public ConexaoBanco() {
         BasicDataSource dev = new BasicDataSource();
         dev.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dev.setUrl("jdbc:mysql://172.17.0.2:3306/Observium?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
+        dev.setUrl("jdbc:mysql://172.17.0.3:3306/Observium?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
         dev.setUsername("root");
         dev.setPassword("Observium123");
         
-       BasicDataSource prod = new BasicDataSource();
-       prod.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-       prod.setUrl("jdbc:sqlserver://bdobservium.database.windows.net;"
-               + "database=bd-observium;encrypt=true;trustCertificate=false;"
-               + "hostNameInCertificate=*.database.windows.net");
-       prod.setUsername("rootObservium");
+        BasicDataSource prod = new BasicDataSource();
+        prod.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        prod.setUrl("jdbc:sqlserver://bdobservium.database.windows.net;"
+                + "database=bd-observium;encrypt=true;trustCertificate=false;"
+                + "hostNameInCertificate=*.database.windows.net");
+        prod.setUsername("rootObservium");
         prod.setPassword("2ads$grupo6");
         
         conexaoNuvem = new JdbcTemplate(prod);

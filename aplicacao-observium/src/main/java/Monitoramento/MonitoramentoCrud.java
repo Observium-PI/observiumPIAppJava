@@ -54,9 +54,9 @@ public class MonitoramentoCrud {
         idComp = idComp.replace("[{idComponente=", "");
         idComp = idComp.replace("}]", "");
         
-        Integer idComponente = Integer.valueOf(idComp);
+        Integer idComponenteN = Integer.parseInt(idComp.trim());
         
-        return idComponente;
+        return idComponenteN;
     }
     
     //MÉTODO PARA BUSCAR ID DE COMPONENTE NO BANCO LOCAL
@@ -74,8 +74,8 @@ public class MonitoramentoCrud {
         idComp = idComp.replace("[{idComponente=", "");
         idComp = idComp.replace("}]", "");
         
-        Integer idComponente = Integer.valueOf(idComp);
+        Integer idComponenteL = Integer.parseInt(idComp.trim());
         
-        return idComponente;
+        return idComponenteL;
     }
 }

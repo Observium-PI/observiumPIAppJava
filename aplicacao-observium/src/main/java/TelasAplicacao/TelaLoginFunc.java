@@ -103,46 +103,47 @@ public class TelaLoginFunc extends javax.swing.JFrame {
 
     private void bttLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttLoginActionPerformed
         BasicDataSource dataSource = new BasicDataSource();
-
+        
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
-
+        
         String usuarioLogin = codigoUsuario.getText();
         String usuarioSenha = senhaUsuario.getText();
         
         //CHAMANDO UM MÉTODO PARA VALIDAR O USUÁRIO QUE ESTÁ TENTANDO LOGAR
         String login = usuario.validarUsuario(usuarioLogin, usuarioSenha).toString().replace("[{=", "");
         login = login.replace("}]", "");
-
+        
         switch (login) {
             case "1":
                 String nome = usuario.buscarNomeUsuario(usuarioLogin);
                 usuario.setUsuario(nome);
                 TelaFuncMaq registro = new TelaFuncMaq(usuario);
+                
                 // Inserindo os dados do usuário que acabou de logar no banco de dados local
                 List<String> dadosUsuario = usuario.inserindoUsuarioNoLocal(usuarioLogin);
-                Integer id = Integer.valueOf(dadosUsuario.get(0));
-                String email = dadosUsuario.get(2);
-                String setor = dadosUsuario.get(3);
-                String tipoUsuario = dadosUsuario.get(4);
-                String fkHospital = dadosUsuario.get(5);
-               conexao.getConexaoLocal().update("Insert into Usuario (nome, email, setor, tipoUsuario, login, senha, fkHospital) "
+                
+                if (!(dadosUsuario.size() == 0)) {
+                    String email = dadosUsuario.get(2);
+                    String setor = dadosUsuario.get(3);
+                    String tipoUsuario = dadosUsuario.get(4);
+                    String fkHospital = dadosUsuario.get(5);
+                
+                    conexao.getConexaoLocal().update("Insert into Usuario (nome, email, setor, tipoUsuario, login, senha, fkHospital) "
                        + "values (?, ?, ?, ?, ?, ?, ?)",
                        nome, email, setor, tipoUsuario, usuarioLogin, usuarioSenha, fkHospital);
-                
-                
-                
+                }
                 
                 this.dispose();
                 registro.setVisible(true);
                 break;
-
+                
             default:
                 resultadoLogin.setText("Usuário ou senha incorreto.");
                 break;
         }
-
+        
     }//GEN-LAST:event_bttLoginActionPerformed
-
+    
     private void codigoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codigoUsuarioActionPerformed
 
     }//GEN-LAST:event_codigoUsuarioActionPerformed

@@ -70,7 +70,7 @@ public class App {
         monitorar.incluirMonitoramentoLocal(monitoramentoMemoriaLocal);
         
         //LISTANDO DADOS SOBRE OS DISCOS
-        List<Object> listaTotalDisco = disco.totalDisco();
+        /*List<Object> listaTotalDisco = disco.totalDisco();
         List<Object> listaDisponivelDisco = disco.disponivelDisco();
         
         for (int i = 0; i < listaTotalDisco.size(); i++) {
@@ -98,7 +98,7 @@ public class App {
                 Integer usoDisk = totalDisco - disponivelDisco;
                 usoDisk = usoDisk * 100;
                 usoDisk = usoDisk / totalDisco;
-
+                
                 String medida = String.valueOf(usoDisk);
                 Double medidaDisco = Double.valueOf(medida);
                 
@@ -108,13 +108,13 @@ public class App {
                     medidaDisco, unidadeDeMedidaDisco);
                 Monitoramento monitoramentoDiscoLocal = new Monitoramento(fkComponenteDiscoLocal, dataHoraDisco, 
                     medidaDisco, unidadeDeMedidaDisco);
-
+                
                 monitorar.incluirMonitoramentoNuvem(monitoramentoDiscoNuvem);
                 monitorar.incluirMonitoramentoLocal(monitoramentoDiscoLocal);
                 
             }
             
-        }
+        }*/
                 
     }
     
