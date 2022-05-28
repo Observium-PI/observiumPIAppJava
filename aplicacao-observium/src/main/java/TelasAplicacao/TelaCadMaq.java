@@ -4,6 +4,9 @@ import Maquina.Maquina;
 import Maquina.MaquinaCrud;
 import Componentes.Componente;
 import Componentes.ComponenteCrud;
+import Componentes.Cpu;
+import Componentes.Disco;
+import Componentes.Memory;
 import Usuarios.UsuarioCrud;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -172,60 +175,34 @@ public class TelaCadMaq extends javax.swing.JFrame {
                 Maquina maquina = new Maquina(hostName, endMac, fabricante,
                     arquitetura, sistemaOperacional, localidade, fkHospital);
 
-                computador.incluirNuvem(maquina); //INCLUIR NO BANCO
                 computador.incluirLocal(maquina); //INCLUIR NO BANCO
 
                 //========================COMPONENTES===========================
                 ComponenteCrud componentes = new ComponenteCrud(dataSource);
-
-                //BUSCANDO ID DO COMPUTADOR CADASTRADO
-                List idPcNuvem = componentes.buscarIdComputadorNuvem(hostName);
-                String idMaquinaNuvem = String.valueOf(idPcNuvem);
-                idMaquinaNuvem = idMaquinaNuvem.replace("[{idComputador=", "");
-                idMaquinaNuvem = idMaquinaNuvem.replace("}]", "");
                 
-                List idPcLocal = componentes.buscarIdComputadorLocal(hostName);
-                String idMaquinaLocal = String.valueOf(idPcLocal);
-                idMaquinaLocal = idMaquinaLocal.replace("[{idComputador=", "");
-                idMaquinaLocal = idMaquinaLocal.replace("}]", "");
+                Cpu cpu = new Cpu();
+                Memory memory = new Memory();
+                Disco disco = new Disco();
 
-                Integer idComputadoresNuvem = Integer.valueOf(idMaquinaNuvem);
-                Integer idComputadoresLocal = Integer.valueOf(idMaquinaLocal);
-
-                String haveCpu = componentes.buscarCpuComponente();
-                String haveMemoria = componentes.buscarMemoriaComponente();
-
-                //INSERINDO CPU NA NUVEM
-                Componente cpuNuvem = new Componente(haveCpu, idComputadoresNuvem);
-                componentes.incluirComponenteNuvem(cpuNuvem); //INCLUIR NO BANCO
+                Integer idPcLocal = computador.buscarIdComputadorLocal(hostName);
                 
                 //INSERINDO CPU NO LOCAL
-                Componente cpuLocal = new Componente(haveCpu, idComputadoresLocal);
-                componentes.incluirComponenteLocal(cpuLocal); //INCLUIR NO BANCO
-
-                //INSERINDO MEMÓRIA
-                if (haveMemoria != null) {
-                    Componente memoriaNuvem = new Componente(haveMemoria, idComputadoresNuvem);
-                    componentes.incluirComponenteNuvem(memoriaNuvem); //INCLUIR NO BANCO NA NUVEM
-                    
-                    Componente memoriaLocal = new Componente(haveMemoria, idComputadoresLocal);
-                    componentes.incluirComponenteLocal(memoriaLocal); //INCLUIR NO BANCO NO LOCAL
-                } else {
-                    System.out.println("Sem memória");
-                }
-
-                //INSERINDO DISCOS
-                Integer haveDisco = componentes.buscarVolumesComponente();
-
-                for (int i = 0; i < haveDisco; i++) {
-                    Componente disco = new Componente("disco " + (i + 1), idComputadoresNuvem);
-                    componentes.incluirComponenteNuvem(disco); //INCLUIR NO BANCO
-                }
+                String nomeCpu = cpu.buscarNomeCpu();
                 
-                for (int i = 0; i < haveDisco; i++) {
-                    Componente disco = new Componente("disco " + (i + 1), idComputadoresLocal);
-                    componentes.incluirComponenteLocal(disco); //INCLUIR NO BANCO
-                }
+                Componente cpuLocal = new Componente(nomeCpu, "CPU", idPcLocal);
+                componentes.incluirComponenteLocal(cpuLocal); //INCLUIR NO BANCO
+                
+                //INSERINDO MEMÓRIA
+                String nomeMemoria = memory.buscarNomeMemoria();
+                
+                Componente memoriaLocal = new Componente(nomeMemoria, "MEMORIA", idPcLocal);
+                componentes.incluirComponenteLocal(memoriaLocal);
+                
+                //INSERINDO DISCO
+                String nomeDisco = disco.buscarNomeDisco();
+                
+                Componente discoLocal = new Componente(nomeDisco, "DISCO", idPcLocal);
+                componentes.incluirComponenteLocal(discoLocal);
                 
                 JOptionPane.showMessageDialog(this, "Máquina cadastrada com sucesso!");
                 

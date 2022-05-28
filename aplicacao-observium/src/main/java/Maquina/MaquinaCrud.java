@@ -9,6 +9,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 import BancoDeDados.ConexaoBanco;
+import java.util.Map;
 
 public class MaquinaCrud {
     private JdbcTemplate jdbcTemplateNuvem;
@@ -89,6 +90,49 @@ public class MaquinaCrud {
         String sistemaOperacional = looca.getSistema().getSistemaOperacional();
         
         return sistemaOperacional;
+    }
+    
+    //MÉTODO PARA BUSCAR O ID DO COMPUTADOR NO BANCO NA NUVEM
+    public Integer buscarIdComputadorNuvem(String hostname) {
+        List<Map<String, Object>> buscarId = conexao.getConexaoNuvem().queryForList(
+                "select idComputador from Computador where hostname = ?", hostname);
+        
+        Object id = buscarId;
+        
+        //RETIRANDO O QUE NÃO É NECESSÁRIO DA BUSCA NO BANCO DE DADOS E TRANSFORMANDO
+        //EM UM NÚMERO INTEIRO
+        String idComp = String.valueOf(id);
+        idComp = idComp.replace("[{idComputador=", "");
+        idComp = idComp.replace("}]", "");
+        
+        Integer idComponente = Integer.parseInt(idComp.trim());
+        
+        return idComponente;
+        
+    }
+    
+    //MÉTODO PARA BUSCAR ID DO COMPUTADOR NO BANCO LOCAL
+    public Integer buscarIdComputadorLocal(String hostname) {
+        List<Map<String, Object>> buscarId = conexao.getConexaoLocal().queryForList(
+                "select idComputador from Computador where hostname = ?", hostname);
+        
+        if (buscarId.size() == 0) {
+            return 0;
+        } else {
+            //RETIRANDO O QUE NÃO É NECESSÁRIO DA BUSCA NO BANCO DE DADOS E TRANSFORMANDO
+            //EM UM NÚMERO INTEIRO
+            Object id = buscarId;
+            
+            String idComp = String.valueOf(id);
+            idComp = idComp.replace("[{idComputador=", "");
+            idComp = idComp.replace("}]", "");
+
+            Integer idComputador = Integer.parseInt(idComp.trim());
+
+            return idComputador;
+            
+        }
+        
     }
     
 }

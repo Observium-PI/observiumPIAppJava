@@ -13,32 +13,42 @@ public class Monitoramento {
         jdbcTemplate = conexao.getConexaoLocal();
     }
     
-    private Integer fkComponente;
+    private Integer cpu;
+    private Integer memoria;
+    private Integer disco;
     private String dataHora;
-    private Double medida;
-    private String unidadeDeMedida;
+    private Integer fkComputador;
 
-    public Monitoramento(Integer fkComponente, String dataHora, Double medida, String unidadeDeMedida) {
-        this.fkComponente = fkComponente;
+    public Monitoramento(Integer cpu, Integer memoria, Integer disco, String dataHora, Integer fkComputador) {
+        this.cpu = cpu;
+        this.memoria = memoria;
+        this.disco = disco;
         this.dataHora = dataHora;
-        this.medida = medida;
-        this.unidadeDeMedida = unidadeDeMedida;
+        this.fkComputador = fkComputador;
     }
 
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
+    public Integer getCpu() {
+        return cpu;
     }
 
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public void setCpu(Integer cpu) {
+        this.cpu = cpu;
     }
 
-    public Integer getFkComponente() {
-        return fkComponente;
+    public Integer getMemoria() {
+        return memoria;
     }
 
-    public void setFkComponente(Integer fkComponente) {
-        this.fkComponente = fkComponente;
+    public void setMemoria(Integer memoria) {
+        this.memoria = memoria;
+    }
+
+    public Integer getDisco() {
+        return disco;
+    }
+
+    public void setDisco(Integer disco) {
+        this.disco = disco;
     }
 
     public String getDataHora() {
@@ -49,20 +59,12 @@ public class Monitoramento {
         this.dataHora = dataHora;
     }
 
-    public Double getMedida() {
-        return medida;
+    public Integer getFkComputador() {
+        return fkComputador;
     }
 
-    public void setMedida(Double medida) {
-        this.medida = medida;
-    }
-
-    public String getUnidadeDeMedida() {
-        return unidadeDeMedida;
-    }
-
-    public void setUnidadeDeMedida(String unidadeDeMedida) {
-        this.unidadeDeMedida = unidadeDeMedida;
+    public void setFkComputador(Integer fkComputador) {
+        this.fkComputador = fkComputador;
     }
     
 }

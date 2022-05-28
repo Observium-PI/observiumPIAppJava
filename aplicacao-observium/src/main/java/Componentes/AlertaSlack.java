@@ -1,6 +1,7 @@
 package Componentes;
 
 import BancoDeDados.ConexaoBanco;
+import Maquina.MaquinaCrud;
 import com.github.britooo.looca.api.core.Looca;
 import com.slack.api.Slack;
 import com.slack.api.methods.MethodsClient;
@@ -16,143 +17,110 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 //precisa herdar do TimerTask para rodar as funções da biblioteca
-public class AlertaSlack extends TimerTask {
+public class AlertaSlack {
 
     private String name;
     ConexaoBanco conexao = new ConexaoBanco();
     BasicDataSource dataSource = new BasicDataSource();
     AlertaSlackCrud alerta = new AlertaSlackCrud(dataSource);
+    MaquinaCrud maquinaCrud = new MaquinaCrud(dataSource);
     Looca looca = new Looca();
 
     //construtor que recebe o nome da thread
     public AlertaSlack(String n) {
         this.name = n;
     }
-
-    //função do TimerTask que roda o código principal da classe
-    //ou seja, o run roda a função que verifica a thread e se for a thread certa
-    //executa a função inicar() e pausa por 1 seg a thread atual
-    @Override
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " " + name);
-        if ("Thread1".equalsIgnoreCase(name)) {
-            try {
-                iniciar();
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (Exception ex) {
-                Logger.getLogger(AlertaSlack.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    public void iniciar() throws Exception {
-        resgatar();
-    }
-
-    public void resgatar() throws Exception {
-
-        Disk disk = new Disk(dataSource);
-        Cpu cpu = new Cpu(dataSource);
-        Memory ram = new Memory(dataSource);
-
-        Double medidaCpu = cpu.looca.getProcessador().getUso();
-        String tipoComponente = "";
-        Double uso = 0.0;
-
-        //Definindo o uso e o tipo do componente como o do CPU do pc atual e
-        //enviando para a validação de alerta
-        uso = medidaCpu;
-        tipoComponente = "CPU";
-
-        validaAlerta(tipoComponente, uso);
-
-        //Definindo o uso e o tipo do componente como o do RAM do pc atual e
-        //enviando para a validação de alerta
-        uso = ram.memoriaEmUso() * 100 / ram.memoriaTotal();
-        tipoComponente = "RAM";
-
-        validaAlerta(tipoComponente, uso);
-
-        //Definindo o uso e o tipo do componente como o do DISCO do pc atual e
-        //enviando para a validação de alerta
-        //Convertendo a lista com a quantidade de gigas usado e total disponivel
-        //de list para string e de string para double
-        for (int i = 0; i < disk.qtdDiscos(); i++) {
-            String totalTxt = disk.totalDisco().get(i).toString();
-            String atualTxt = disk.disponivelDisco().get(i).toString();
-
-            totalTxt = totalTxt.replace("[", "");
-            totalTxt = totalTxt.replace("]", "");
-            atualTxt = atualTxt.replace("[", "");
-            atualTxt = atualTxt.replace("]", "");
-
-            Double atualDouble = Double.parseDouble(atualTxt);
-            Double totalDouble = Double.parseDouble(totalTxt);
-
-            //calculando porcentagem de uso
-            uso = totalDouble - atualDouble;
-            uso = (uso * 100) / totalDouble;
-            tipoComponente = "DISCO";
-
-            validaAlerta(tipoComponente, uso);
-        }
-    }
-
-    public void validaAlerta(String tipoComponente, Double uso) throws Exception {
+    
+    public void validaAlerta(Integer medidaCpu, Integer medidaMemoria, Integer medidaDisco) throws Exception {
         try {
             String tipoAlerta = "";
             String nivelAlerta = "";
-            String txtReforco = "";
-            String hostname = InetAddress.getLocalHost().getHostName();
-
-            //Definindo o componente do alerta (tipo)
-            if (tipoComponente.equals("CPU")) {
-                tipoAlerta = "Temperatura";
-            } else if (tipoComponente.equals("DISCO")) {
-                tipoAlerta = "Armazenamento";
-            } else if (tipoComponente.equals("RAM")) {
-                tipoAlerta = "Uso";
+            String tipoComponente = "";
+            String hostname = maquinaCrud.buscarHostName();
+            
+            List<Integer> listaComponente = new ArrayList();
+            
+            listaComponente.add(medidaCpu);
+            listaComponente.add(medidaMemoria);
+            listaComponente.add(medidaDisco);
+            
+            for (int i = 0; i < listaComponente.size(); i++) {
+                if (i == 0) {
+                    tipoAlerta = "Processamento";
+                    tipoComponente = "CPU";
+                } else if (i == 1) {
+                    tipoAlerta = "Uso";
+                    tipoComponente = "Memória";
+                } else {
+                    tipoAlerta = "Armazenamento";
+                    tipoComponente = "Disco";
+                }
+                
+                if (listaComponente.get(i) >= 65 && listaComponente.get(i) <= 75) {
+                    nivelAlerta = "médio";
+                    enviarAlerta(tipoAlerta, nivelAlerta, tipoComponente, listaComponente.get(i), hostname);
+                } else if (listaComponente.get(i) >= 75 && listaComponente.get(i) <= 85) {
+                    nivelAlerta = "alto";
+                    enviarAlerta(tipoAlerta, nivelAlerta, tipoComponente, listaComponente.get(i), hostname);
+                } else if (listaComponente.get(i) > 85) {
+                    nivelAlerta = "crítico";
+                    enviarAlerta(tipoAlerta, nivelAlerta, tipoComponente, listaComponente.get(i), hostname);
+                }
             }
-
-            //Definindo o nivel do alerta e txt de reforço do alerta
-            if (uso >= 65 && uso <= 75) {
-                nivelAlerta = "médio";
-                txtReforco = "acima da média!";
-                enviarAlerta(txtReforco, tipoAlerta, nivelAlerta, tipoComponente, uso, hostname);
-            } else if (uso >= 75 && uso <= 85) {
-                nivelAlerta = "alto";
-                txtReforco = "necessitando de uma atenção maior!";
-                enviarAlerta(txtReforco, tipoAlerta, nivelAlerta, tipoComponente, uso, hostname);
-            } else if (uso > 85) {
-                nivelAlerta = "crítico";
-                txtReforco = "prestes a parar de funcionar!";
-                enviarAlerta(txtReforco, tipoAlerta, nivelAlerta, tipoComponente, uso, hostname);
-            }
+            
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     public void enviarAlerta(
-            String txtReforco,
             String tipoAlerta,
             String nivelAlerta,
             String tipoComponente,
-            Double uso,
+            Integer uso,
             String hostname
     ) throws Exception {
         try {
             Slack slack = Slack.getInstance();
-
-            String msg = String.format("Alerta %s : %s com"
-                    + " %s %s\n%s atual de %s: %.2f%%"
+            String txtReforco = "";
+            
+            if (tipoComponente.equalsIgnoreCase("CPU")) {
+                if (nivelAlerta.equalsIgnoreCase("médio")) {
+                    txtReforco = "com uso acima da média!";
+                } else if (nivelAlerta.equalsIgnoreCase("alto")) {
+                    txtReforco = "necessitando de uma atenção maior!";
+                } else {
+                    txtReforco = "com uso excessivo de processamento!";
+                }
+            } else if (tipoComponente.equalsIgnoreCase("Memória")) {
+                if (nivelAlerta.equalsIgnoreCase("médio")) {
+                    txtReforco = "em uso acima da média!";
+                } else if (nivelAlerta.equalsIgnoreCase("alto")) {
+                    txtReforco = "necessitando de uma atenção maior!";
+                } else {
+                    txtReforco = "em uso perto do seu limite!";
+                }
+            } else {
+                if (nivelAlerta.equalsIgnoreCase("médio")) {
+                    txtReforco = "com armazenamento acima da metade!";
+                } else if (nivelAlerta.equalsIgnoreCase("alto")) {
+                    txtReforco = "com armazenamento quase cheio!";
+                } else {
+                    txtReforco = "com armazenamento beirando o total!";
+                }
+            }
+            
+            String msg = String.format(""
+                    + "Alerta %s: %s %s"
+                    + "\n%s atual de %s: %d%%"
                     + "\nHostname: %s",
-                    nivelAlerta, tipoComponente, tipoAlerta, txtReforco, tipoAlerta, tipoComponente, uso, hostname);
-
+                    nivelAlerta, tipoComponente, txtReforco, tipoAlerta, 
+                        tipoComponente, uso, hostname);
+            
             // Inicializa um metódo cliente API com o token especificado
             MethodsClient methods = slack.methods("");
 
@@ -167,16 +135,9 @@ public class AlertaSlack extends TimerTask {
 
             DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             String dataHora = dataFormat.format(LocalDateTime.now());
-
-            //formatando o tipo do componente para fazer o select certo
-            if (tipoComponente == "RAM") {
-                tipoComponente = "memoriaRAM";
-            } else if (tipoComponente == "DISCO") {
-                tipoComponente = "disco";
-            }
-
+            
             //registra o alerta na tabela Historico
-            alerta.resgatarIdMonitoramento(msg, hostname, dataHora, tipoComponente);
+            alerta.resgatarIdMonitoramento(msg, hostname, dataHora);
 
             msg += "\nData do ocorrido: " + dataHora;
             String sistemaOperacional = looca.getSistema().getSistemaOperacional();

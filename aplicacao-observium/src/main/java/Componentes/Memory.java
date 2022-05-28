@@ -2,42 +2,58 @@ package Componentes;
 
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.memoria.Memoria;
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import oshi.SystemInfo;
-import oshi.hardware.HardwareAbstractionLayer;
+import com.github.britooo.looca.api.util.Conversor;
+import java.text.DecimalFormat;
 
 public class Memory {
-    private JdbcTemplate jdbcTemplate;
     Looca looca = new Looca();
     Memoria memoria = new Memoria();
-    HardwareAbstractionLayer hardware = new SystemInfo().getHardware();
+    DecimalFormat formatador = new DecimalFormat("0");
+    Conversor convert = new Conversor();
+    Integer divisor = 1000000000;
     
-    public Memory(BasicDataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
+    public String buscarNomeMemoria() {
+        long memoriaTotal = looca.getMemoria().getTotal();
+        
+        String memory = String.format("memoriaRAM-%s", convert.formatarBytes(memoriaTotal));
+        
+        return memory;
     }
     
-    public Double memoriaTotal() {
+    public Integer memoriaTotal() {
         Long memoria = looca.getMemoria().getTotal();
         String memoriaString = String.valueOf(memoria);
         Double memoriaTotal = Double.valueOf(memoriaString);
         
-        return memoriaTotal / 1000000000;
+        String conversaoMemoria = formatador.format(memoriaTotal / divisor);
+        
+        Integer memoriaTotalInteiro = Integer.valueOf(conversaoMemoria);
+        
+        return memoriaTotalInteiro;
     }
     
-    public Double memoriaEmUso() {
+    public Integer memoriaEmUso() {
         Long memoria = looca.getMemoria().getEmUso();
         String memoriaString = String.valueOf(memoria);
         Double memoriaEmUso = Double.valueOf(memoriaString);
         
-        return memoriaEmUso / 1000000000;
+        String conversaoMemoria = formatador.format(memoriaEmUso / divisor);
+        
+        Integer memoriaUsoInteiro = Integer.valueOf(conversaoMemoria);
+        
+        return memoriaUsoInteiro;
     }
     
-    public Double memoriaDisponivel() {
+    public Integer memoriaDisponivel() {
         Long memoria = looca.getMemoria().getDisponivel();
         String memoriaString = String.valueOf(memoria);
         Double memoriaDisponivel = Double.valueOf(memoriaString);
         
-        return memoriaDisponivel / 1000000000;
+        String conversaoMemoria = formatador.format(memoriaDisponivel / divisor);
+        
+        Integer memoriaDisponivelInteiro = Integer.valueOf(conversaoMemoria);
+        
+        return memoriaDisponivelInteiro;
     }
+    
 }

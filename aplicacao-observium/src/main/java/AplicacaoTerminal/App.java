@@ -10,6 +10,16 @@ import java.util.Scanner;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 // Classe Timer, para executar funções a cada x segundos
+import BancoDeDados.ConexaoBanco;
+import Componentes.AlertaSlack;
+import Componentes.Componente;
+import Componentes.ComponenteCrud;
+import Componentes.Cpu;
+import Maquina.Maquina;
+import java.util.Scanner;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+// Classe Timer, para executar funções a cada x segundos
 import java.util.Timer;
 import java.util.TimerTask;
 // Para buscar config do PC
@@ -29,9 +39,9 @@ public class App {
     static UsuarioCrud usuarioCRUD = new UsuarioCrud(dataSource);
     static Timer timer = new Timer();
     static AlertaSlack alerta = new AlertaSlack("Thread1");//definindo uma thread a parte para alerta
-    static Componentes.App aplicacao = new Componentes.App();
+    static Componentes.AppMonitoramento aplicacao = new Componentes.AppMonitoramento();
     static MaquinaCrud maquinaCRUD = new MaquinaCrud(dataSource);
-    
+    /*
     public static void main(String[] args) throws InterruptedException, UnknownHostException, SocketException {
         menu();
     }
@@ -44,9 +54,9 @@ public class App {
 
         verificarSeComputadorEstaCadastrado();
 
-        /* Inicio da aplicação
+        Inicio da aplicação
             Menu
-         */
+         
         do {
             System.out.println("\nBem vindo a nossa aplicacao. Digite uma tecla p"
                     + "ara prosseguir: \n"
@@ -117,6 +127,8 @@ public class App {
                                 Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (SocketException ex) {
                                 Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (Exception ex) {
+                                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }, delay, interval);
@@ -172,7 +184,7 @@ public class App {
             // Inserindo componentes
             //========================COMPONENTES===========================
             ComponenteCrud componentes = new ComponenteCrud(dataSource);
-
+            
             //BUSCANDO ID DO COMPUTADOR CADASTRADO
             List idPcNuvem = componentes.buscarIdComputadorNuvem(hostname);
             List idPcLocal = componentes.buscarIdComputadorLocal(hostname);
@@ -237,7 +249,7 @@ public class App {
             System.out.println("Maquina cadastrada com sucesso!");
         }
     }
-
+    
     public static Boolean sair() {
         Boolean exited = false;
 
@@ -274,7 +286,7 @@ public class App {
         MaquinaCrud maquinaCRUD = new MaquinaCrud(dataSource);
         String hostname = maquinaCRUD.buscarHostName();
         ComponenteCrud compCRUD = new ComponenteCrud(dataSource);
-
+        
         if (compCRUD.buscarIdComputadorNuvem(hostname).size() != 0) {
             if(compCRUD.buscarIdComputadorLocal(hostname).size() != 0){
                  return true;
@@ -283,9 +295,9 @@ public class App {
         } else {
             return false;
         }
-
-    }
-
+        
+        }
+        
     public static Boolean validarLogin(String usuario, String senha) {
         BasicDataSource dataSource = new BasicDataSource();
 
@@ -369,4 +381,5 @@ public class App {
                     maquinaCRUD.buscarSO()));
         
     }
+    */
 }

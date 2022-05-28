@@ -4,6 +4,7 @@
  */
 package TelasAplicacao;
 
+import Componentes.Cpu;
 import Maquina.MaquinaCrud;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -11,8 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 import com.github.britooo.looca.api.core.Looca;
-import Componentes.Disk;
+import Componentes.Disco;
+import Componentes.Memory;
 import Usuarios.UsuarioCrud;
+import com.github.britooo.looca.api.group.memoria.Memoria;
 
 /**
  *
@@ -42,7 +45,9 @@ public class TelaHardware extends javax.swing.JFrame {
         
         //INSTÂNCIANDO AS CLASSES
         MaquinaCrud computador = new MaquinaCrud(dataSource);
-        Disk disco = new Disk(dataSource);
+        Cpu cpu = new Cpu();
+        Memory memory = new Memory();
+        Disco disco = new Disco();
         Looca looca = new Looca();
         
         //==============================COMPUTADOR==============================
@@ -64,14 +69,14 @@ public class TelaHardware extends javax.swing.JFrame {
         //=============================COMPONENTES==============================
         
         //OBTENDO INFORMAÇÕES DOS COMPONENTES E GUARDANDO EM VARIAVEIS
-        String cpu = looca.getProcessador().getNome();
-        Long memoria = looca.getMemoria().getTotal() / 1000000000;
-        Integer discos = looca.getGrupoDeDiscos().getQuantidadeDeDiscos();
+        String nomeCpu = cpu.buscarNomeCpu();
+        String nomeMemoria = memory.buscarNomeMemoria();
+        String nomeDisco = disco.buscarNomeDisco();
         
         //TRANFERINDO OS DADOS GUARDADOS DOS COMPONENTES PARA AS LABELS NA TELA
-        labelCpu.setText("Processador: " + cpu);
-        labelMemory.setText("Memória disponivel: " + memoria + " GB");
-        labelDiscos.setText("Quantidade de Discos: " + discos + " discos disponiveis");
+        labelCpu.setText("Processador: " + nomeCpu);
+        labelMemory.setText("Memória: " + nomeMemoria);
+        labelDiscos.setText("Disco: " + nomeDisco);
     }
 
     /**

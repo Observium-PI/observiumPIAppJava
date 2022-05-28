@@ -165,16 +165,16 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
         try {
             if(!verificarSeComputadorEstaCadastrado()){
-            BasicDataSource dataSource = new BasicDataSource();
-        UsuarioCrud usuario = new UsuarioCrud(dataSource);
-        String nomeUsuario = usuario.buscarNomeUsuario(login);
-        usuario.setUsuario(nomeUsuario);
-        TelaCadMaq cadastroMaq = new TelaCadMaq(usuario);
-        this.dispose();
-        cadastroMaq.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(this, "Máquina já cadastrada!");
-        }
+                BasicDataSource dataSource = new BasicDataSource();
+                UsuarioCrud usuario = new UsuarioCrud(dataSource);
+                String nomeUsuario = usuario.buscarNomeUsuario(login);
+                usuario.setUsuario(nomeUsuario);
+                TelaCadMaq cadastroMaq = new TelaCadMaq(usuario);
+                this.dispose();
+                cadastroMaq.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Máquina já cadastrada!");
+            }
         } catch (UnknownHostException ex) {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SocketException ex) {
@@ -264,11 +264,11 @@ public class TelaFuncMaq extends javax.swing.JFrame {
         String hostname = maquinaCRUD.buscarHostName();
         ComponenteCrud compCRUD = new ComponenteCrud(dataSource);
 
-        if (compCRUD.buscarIdComputadorNuvem(hostname).size() != 0) {
-            if(compCRUD.buscarIdComputadorLocal(hostname).size() != 0){
+        //if (maquinaCRUD.buscarIdComputadorNuvem(hostname) != 0) {
+            if(maquinaCRUD.buscarIdComputadorLocal(hostname) != 0){
                  return true;
-            }
-           return false;
+            //}
+           //return false;
         } else {
             return false;
         }

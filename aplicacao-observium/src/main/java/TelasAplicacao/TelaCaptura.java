@@ -5,7 +5,7 @@
 package TelasAplicacao;
 
 import Componentes.AlertaSlack;
-import Componentes.App;
+import Componentes.AppMonitoramento;
 import java.awt.Color;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -25,7 +25,6 @@ public class TelaCaptura extends javax.swing.JFrame {
     
     BasicDataSource dataSource = new BasicDataSource();
     Timer timer = new Timer();
-    Timer t = new Timer();
     
     Color azulObservium = Color.decode("#2689b9");
     
@@ -123,16 +122,13 @@ public class TelaCaptura extends javax.swing.JFrame {
     private void bttStartAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttStartAppActionPerformed
         bttStartApp.setEnabled(false);
         bttStopApp.setEnabled(true);
-        App aplicacao = new App();
-        AlertaSlack alerta = new AlertaSlack("Thread1");//definindo uma thread a parte para alerta
+        AppMonitoramento aplicacao = new AppMonitoramento();
         
         timer = new Timer();
-        t = new Timer();
         
         try {
             int delay = 2000;   // tempo de espera antes da 1ª execução da tarefa.
             int interval = 3000;  // intervalo no qual a tarefa será executada.
-            t.scheduleAtFixedRate(alerta, 0, 60000);
             
             timer.scheduleAtFixedRate(new TimerTask() {
                 public void run() {
@@ -146,6 +142,8 @@ public class TelaCaptura extends javax.swing.JFrame {
                     } catch (UnknownHostException ex) {
                         Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (SocketException ex) {
+                        Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
                         Logger.getLogger(TelaCaptura.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
@@ -162,7 +160,6 @@ public class TelaCaptura extends javax.swing.JFrame {
 
     private void bttRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttRetornarActionPerformed
         timer.cancel();
-        t.cancel();
         
         UsuarioCrud usuario = new UsuarioCrud(dataSource);
 
@@ -177,7 +174,6 @@ public class TelaCaptura extends javax.swing.JFrame {
         bttStartApp.setEnabled(true);
         bttStopApp.setEnabled(false);
         timer.cancel();
-        t.cancel();
         labelTexto.setForeground(Color.white);
         gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica2.png")));
         labelTexto.setText("Captura de dados encerrada...");
