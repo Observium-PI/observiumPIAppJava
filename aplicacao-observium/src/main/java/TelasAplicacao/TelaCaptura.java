@@ -12,7 +12,10 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Usuarios.UsuarioCrud;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.TimerTask;
 import java.util.Timer;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -44,6 +47,10 @@ public class TelaCaptura extends javax.swing.JFrame {
         setLocationRelativeTo(this);
         bttStopApp.setEnabled(false);
         
+        URL url = this.getClass().getResource("/logoIcon.png");
+        Image imagemTitulo = Toolkit.getDefaultToolkit().getImage(url);
+        this.setIconImage(imagemTitulo);
+        
         login = usuario.getLoginUsuario();
     }
 
@@ -68,7 +75,7 @@ public class TelaCaptura extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         gifCarregando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica2.png"))); // NOI18N
+        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica.png"))); // NOI18N
         gifCarregando.setToolTipText("");
         gifCarregando.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         getContentPane().add(gifCarregando, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 190, 160));
@@ -128,7 +135,7 @@ public class TelaCaptura extends javax.swing.JFrame {
         
         try {
             int delay = 2000;   // tempo de espera antes da 1ª execução da tarefa.
-            int interval = 3000;  // intervalo no qual a tarefa será executada.
+            int interval = 7000;  // intervalo no qual a tarefa será executada.
             
             timer.scheduleAtFixedRate(new TimerTask() {
                 public void run() {
@@ -175,7 +182,7 @@ public class TelaCaptura extends javax.swing.JFrame {
         bttStopApp.setEnabled(false);
         timer.cancel();
         labelTexto.setForeground(Color.white);
-        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica2.png")));
+        gifCarregando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nuvemEstatica.png")));
         labelTexto.setText("Captura de dados encerrada...");
     }//GEN-LAST:event_bttStopAppActionPerformed
 

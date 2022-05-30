@@ -137,7 +137,8 @@ public class AlertaSlack {
             String dataHora = dataFormat.format(LocalDateTime.now());
             
             //registra o alerta na tabela Historico
-            alerta.resgatarIdMonitoramento(msg, hostname, dataHora);
+            alerta.resgatarIdMonitoramentoLocal(msg, hostname, dataHora);
+            alerta.resgatarIdMonitoramentoNuvem(msg, hostname, dataHora);
 
             msg += "\nData do ocorrido: " + dataHora;
             String sistemaOperacional = looca.getSistema().getSistemaOperacional();

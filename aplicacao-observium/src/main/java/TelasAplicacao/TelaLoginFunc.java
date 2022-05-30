@@ -5,11 +5,14 @@ import Usuarios.UsuarioCrud;
 import org.apache.commons.dbcp2.BasicDataSource;
 import TelasAplicacao.TelaFuncMaq;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 import java.util.List;
 
 public class TelaLoginFunc extends javax.swing.JFrame {
     
-     ConexaoBanco conexao = new ConexaoBanco();
+    ConexaoBanco conexao = new ConexaoBanco();
 
     /**
      * Creates new form TelaLoginFunc
@@ -18,6 +21,10 @@ public class TelaLoginFunc extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
         logo.requestFocusInWindow();
+        
+        URL url = this.getClass().getResource("/logoIcon.png");
+        Image imagemTitulo = Toolkit.getDefaultToolkit().getImage(url);
+        this.setIconImage(imagemTitulo);
     }
 
     /**

@@ -15,6 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,20 +28,82 @@ public class TelaCadMaq extends javax.swing.JFrame {
 
     public String login;
     public String nome;
+    public Boolean hasPcNuvem;
+    public Boolean hasPcLocal;
+    public String localidade;
+
+    public String getLocalidade() {
+        return localidade;
+    }
+
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
+    }
+    
+    public Boolean getHasPcNuvem() {
+        return hasPcNuvem;
+    }
+
+    public void setHasPcNuvem(Boolean hasPcNuvem) {
+        this.hasPcNuvem = hasPcNuvem;
+    }
+
+    public Boolean getHasPcLocal() {
+        return hasPcLocal;
+    }
+
+    public void setHasPcLocal(Boolean hasPcLocal) {
+        this.hasPcLocal = hasPcLocal;
+    }
     
     BasicDataSource dataSource = new BasicDataSource();
+    MaquinaCrud maquinaCrud = new MaquinaCrud(dataSource);
     
     public TelaCadMaq() {
         initComponents();
         setLocationRelativeTo(this);
     }
     
-    public TelaCadMaq(UsuarioCrud usuario) {
+    public TelaCadMaq(UsuarioCrud usuario) throws UnknownHostException {
         initComponents();
         setLocationRelativeTo(this);
 
+        URL url = this.getClass().getResource("/logoIcon.png");
+        Image imagemTitulo = Toolkit.getDefaultToolkit().getImage(url);
+        this.setIconImage(imagemTitulo);
+        
         login = usuario.getLoginUsuario();
         nome = usuario.getUsuario();
+        
+        String hostName = maquinaCrud.buscarHostName();
+        
+        setHasPcNuvem(maquinaCrud.verificarMaquinaNuvem(hostName));
+        setHasPcLocal(maquinaCrud.verificarMaquinaLocal(hostName));
+        
+        if (getHasPcNuvem().equals(true) || getHasPcLocal().equals(true)) {
+            titulo.setText("Localidade já registrada:");
+            
+            if (getHasPcNuvem().equals(true)) {
+                setLocalidade(maquinaCrud.buscarLocalMaqNuvem(hostName));
+            } else {
+                setLocalidade(maquinaCrud.buscarLocalMaqLocal(hostName));
+            }
+            
+            Integer referencia = getLocalidade().indexOf("-");
+            
+            if (getLocalidade().substring(0, referencia).equals("recepcao")) {
+                comboBoxSetor.setSelectedIndex(0);
+            } else if (getLocalidade().substring(0, referencia).equals("triagem")) {
+                comboBoxSetor.setSelectedIndex(1);
+            } else {
+                comboBoxSetor.setSelectedIndex(2);
+            }
+            
+            numeroAndar.setText(getLocalidade().substring(referencia + 1));
+            
+            comboBoxSetor.setEnabled(false);
+            numeroAndar.setEnabled(false);
+        }
     }
 
     /**
@@ -76,7 +141,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
         titulo.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         titulo.setForeground(new java.awt.Color(255, 255, 255));
         titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titulo.setText("Localidade da máquina");
+        titulo.setText("Registrar localidade:");
         titulo.setPreferredSize(new java.awt.Dimension(149, 20));
         getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 450, 40));
 
@@ -139,72 +204,111 @@ public class TelaCadMaq extends javax.swing.JFrame {
             //==========================COMPUTADOR==============================
             //INSTANCIANDO A CLASSE MAQUINA CRUD
             MaquinaCrud computador = new MaquinaCrud(dataSource);
-
+            
             //OBTENDO INFORMAÇÕES DO COMPUTADOR E GUARDANDO EM VARIAVEIS
             String hostName = computador.buscarHostName();
             String endMac = computador.buscarEndMac();
             String fabricante = computador.buscarFabricante();
             Integer arquitetura = computador.buscarArquitetura();
             String sistemaOperacional = computador.buscarSO();
-            String localidade = "";
             
-            //OBTENDO INFORMAÇÕES SOBRE A LOCALIDADE DA MÁQUINA
-            String andarMaquina = numeroAndar.getText();
-            
-            Object objectSetor = comboBoxSetor.getSelectedItem();
-            String setor = String.valueOf(objectSetor);
-            
-            if (setor.equals("Recepção")) {
-                localidade = "recepcao-" + andarMaquina;
-            } else if (setor.equals("Triagem")) {
-                localidade = "triagem-" + andarMaquina;
+            if (getHasPcNuvem().equals(true) || getHasPcLocal().equals(true)) {
+                if (getHasPcNuvem().equals(true)) {
+                    setLocalidade(computador.buscarLocalMaqNuvem(hostName));
+                } else {
+                    setLocalidade(computador.buscarLocalMaqLocal(hostName));
+                }
             } else {
-                localidade = "alaMedica-" + andarMaquina;
+                //OBTENDO INFORMAÇÕES SOBRE A LOCALIDADE DA MÁQUINA
+                String andarMaquina = numeroAndar.getText();
+
+                Object objectSetor = comboBoxSetor.getSelectedItem();
+                String setor = String.valueOf(objectSetor);
+
+                if (setor.equals("Recepção")) {
+                    setLocalidade("recepcao-" + andarMaquina);
+                } else if (setor.equals("Triagem")) {
+                    setLocalidade("triagem-" + andarMaquina);
+                } else {
+                    setLocalidade("alaMedica-" + andarMaquina);
+                }
             }
             
             //BUSCANDO O ID DO HOSPITAL DO USUÁRIO LOGADO PARA CADASTRAR A MÁQUINA
-            List idHosp = usuario.buscarIdHospitalNuvem(login);
-            String idHospital = String.valueOf(idHosp);
-            idHospital = idHospital.replace("[{fkHospital=", "");
-            idHospital = idHospital.replace("}]", "");
-
-            Integer fkHospital = Integer.valueOf(idHospital);
-
+            Integer fkHospital = usuario.buscarIdHospitalNuvem(login);
+            
             try {
                 //INSERINDO COMPUTADOR NO BANCO COM AS INFORMAÇÕES OBTIDAS
                 Maquina maquina = new Maquina(hostName, endMac, fabricante,
-                    arquitetura, sistemaOperacional, localidade, fkHospital);
-
-                computador.incluirLocal(maquina); //INCLUIR NO BANCO
-
+                    arquitetura, sistemaOperacional, getLocalidade(), fkHospital);
+                
+                if (getHasPcNuvem().equals(false)) {
+                    computador.incluirNuvem(maquina); //INCLUIR NO BANCO NA NUVEM
+                }
+                
+                if (getHasPcLocal().equals(false)) {
+                    computador.incluirLocal(maquina); //INCLUIR NO BANCO LOCAL
+                }
+                
                 //========================COMPONENTES===========================
                 ComponenteCrud componentes = new ComponenteCrud(dataSource);
                 
                 Cpu cpu = new Cpu();
                 Memory memory = new Memory();
                 Disco disco = new Disco();
-
+                
+                Integer idPcNuvem = computador.buscarIdComputadorNuvem(hostName);
                 Integer idPcLocal = computador.buscarIdComputadorLocal(hostName);
                 
                 //INSERINDO CPU NO LOCAL
                 String nomeCpu = cpu.buscarNomeCpu();
                 
-                Componente cpuLocal = new Componente(nomeCpu, "CPU", idPcLocal);
-                componentes.incluirComponenteLocal(cpuLocal); //INCLUIR NO BANCO
+                if (getHasPcNuvem().equals(false)) {
+                    Componente cpuNuvem = new Componente(nomeCpu, "CPU", idPcNuvem);
+                    componentes.incluirComponenteNuvem(cpuNuvem); //INCLUIR NA NUVEM
+                }
+                
+                if (getHasPcLocal().equals(false)) {
+                    Componente cpuLocal = new Componente(nomeCpu, "CPU", idPcLocal);
+                    componentes.incluirComponenteLocal(cpuLocal); //INCLUIR NO BANCO
+                }
                 
                 //INSERINDO MEMÓRIA
                 String nomeMemoria = memory.buscarNomeMemoria();
                 
-                Componente memoriaLocal = new Componente(nomeMemoria, "MEMORIA", idPcLocal);
-                componentes.incluirComponenteLocal(memoriaLocal);
+                if (getHasPcNuvem().equals(false)) {
+                    Componente memoriaNuvem = new Componente(nomeMemoria, "MEMORIA", idPcNuvem);
+                    componentes.incluirComponenteNuvem(memoriaNuvem); //INCLUIR NA NUVEM
+                }
+                
+                if (getHasPcLocal().equals(false)) {
+                    Componente memoriaLocal = new Componente(nomeMemoria, "MEMORIA", idPcLocal);
+                    componentes.incluirComponenteLocal(memoriaLocal); //INCLUIR NO BANCO
+                }
                 
                 //INSERINDO DISCO
                 String nomeDisco = disco.buscarNomeDisco();
                 
-                Componente discoLocal = new Componente(nomeDisco, "DISCO", idPcLocal);
-                componentes.incluirComponenteLocal(discoLocal);
+                if (getHasPcNuvem().equals(false)) {
+                    Componente discoNuvem = new Componente(nomeDisco, "DISCO", idPcNuvem);
+                    componentes.incluirComponenteNuvem(discoNuvem); //INCLUIR NA NUVEM
+                }
                 
-                JOptionPane.showMessageDialog(this, "Máquina cadastrada com sucesso!");
+                if (getHasPcLocal().equals(false)) {
+                    Componente discoLocal = new Componente(nomeDisco, "DISCO", idPcLocal);
+                    componentes.incluirComponenteLocal(discoLocal); //INCLUIR NO BANCO
+                }
+                
+                if (getHasPcLocal().equals(false) && getHasPcNuvem().equals(false)) {
+                    JOptionPane.showMessageDialog(this, "Máquina cadastrada com sucesso"
+                            + "\nna Nuvem e no Banco Local!");
+                } else if (getHasPcLocal().equals(false)) {
+                    JOptionPane.showMessageDialog(this, "Máquina cadastrada no"
+                            + "\nBanco Local com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Máquina cadastrada na"
+                            + "\nNuvem com sucesso!");
+                }
                 
                 String nomeUsuario = usuario.buscarNomeUsuario(login);
                 usuario.setUsuario(nomeUsuario);
@@ -212,7 +316,8 @@ public class TelaCadMaq extends javax.swing.JFrame {
                 this.dispose();
                 funcMaq.setVisible(true);
             } catch (org.springframework.dao.DuplicateKeyException exception) {
-                JOptionPane.showMessageDialog(this, "Máquina já cadastrada!");
+                JOptionPane.showMessageDialog(this, "Máquina já cadastrada na"
+                        + "\nNuvem e no Banco Local!");
                 
                 String nomeUsuario = usuario.buscarNomeUsuario(login);
                 usuario.setUsuario(nomeUsuario);

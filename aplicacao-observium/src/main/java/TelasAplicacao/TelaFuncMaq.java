@@ -12,6 +12,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +24,7 @@ import javax.swing.JOptionPane;
 public class TelaFuncMaq extends javax.swing.JFrame {
 
     BasicDataSource dataSource = new BasicDataSource();
+    MaquinaCrud maquinaCrud = new MaquinaCrud(dataSource);
     
     public String login;
     public String nome;
@@ -37,7 +41,11 @@ public class TelaFuncMaq extends javax.swing.JFrame {
     public TelaFuncMaq(UsuarioCrud usuario) {
         initComponents();
         setLocationRelativeTo(this);
-
+        
+        URL url = this.getClass().getResource("/logoIcon.png");
+        Image imagemTitulo = Toolkit.getDefaultToolkit().getImage(url);
+        this.setIconImage(imagemTitulo);
+        
         login = usuario.getLoginUsuario();
         nome = usuario.getUsuario();
         String texto = "Bem vindo(a) " + nome + "!";
@@ -164,7 +172,12 @@ public class TelaFuncMaq extends javax.swing.JFrame {
 
     private void bttCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarActionPerformed
         try {
-            if(!verificarSeComputadorEstaCadastrado()){
+            String hostname = maquinaCrud.buscarHostName();
+            
+            Boolean hasPcNuvem = maquinaCrud.verificarMaquinaNuvem(hostname);
+            Boolean hasPcLocal = maquinaCrud.verificarMaquinaLocal(hostname);
+            
+            if(hasPcLocal.equals(false) || hasPcNuvem.equals(false)){
                 BasicDataSource dataSource = new BasicDataSource();
                 UsuarioCrud usuario = new UsuarioCrud(dataSource);
                 String nomeUsuario = usuario.buscarNomeUsuario(login);
@@ -173,17 +186,12 @@ public class TelaFuncMaq extends javax.swing.JFrame {
                 this.dispose();
                 cadastroMaq.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "Máquina já cadastrada!");
+                JOptionPane.showMessageDialog(this, "Máquina já cadastrada na"
+                        + "\nNuvem e no Banco Local!");
             }
         } catch (UnknownHostException ex) {
             Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SocketException ex) {
-            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(TelaFuncMaq.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
         
     }//GEN-LAST:event_bttCadastrarActionPerformed
 
@@ -256,23 +264,6 @@ public class TelaFuncMaq extends javax.swing.JFrame {
                 new TelaFuncMaq().setVisible(true);
             }
         });
-    }
-    
-    public static Boolean verificarSeComputadorEstaCadastrado() throws InterruptedException, UnknownHostException, SocketException {
-        BasicDataSource dataSource = new BasicDataSource();
-        MaquinaCrud maquinaCRUD = new MaquinaCrud(dataSource);
-        String hostname = maquinaCRUD.buscarHostName();
-        ComponenteCrud compCRUD = new ComponenteCrud(dataSource);
-
-        //if (maquinaCRUD.buscarIdComputadorNuvem(hostname) != 0) {
-            if(maquinaCRUD.buscarIdComputadorLocal(hostname) != 0){
-                 return true;
-            //}
-           //return false;
-        } else {
-            return false;
-        }
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

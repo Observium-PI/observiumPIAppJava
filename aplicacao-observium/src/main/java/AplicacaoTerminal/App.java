@@ -15,6 +15,8 @@ import Componentes.AlertaSlack;
 import Componentes.Componente;
 import Componentes.ComponenteCrud;
 import Componentes.Cpu;
+import Componentes.Disco;
+import Componentes.Memory;
 import Maquina.Maquina;
 import java.util.Scanner;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -41,7 +43,7 @@ public class App {
     static AlertaSlack alerta = new AlertaSlack("Thread1");//definindo uma thread a parte para alerta
     static Componentes.AppMonitoramento aplicacao = new Componentes.AppMonitoramento();
     static MaquinaCrud maquinaCRUD = new MaquinaCrud(dataSource);
-    /*
+    
     public static void main(String[] args) throws InterruptedException, UnknownHostException, SocketException {
         menu();
     }
@@ -53,21 +55,30 @@ public class App {
         Boolean exited = false;
 
         verificarSeComputadorEstaCadastrado();
-
-        Inicio da aplicação
-            Menu
+                
+        //Inicio da aplicação
+        //Menu
          
         do {
-            System.out.println("\nBem vindo a nossa aplicacao. Digite uma tecla p"
-                    + "ara prosseguir: \n"
+            System.out.println("\nBem vindo a nossa aplicacao. Digite uma tecla "
+                    + "para prosseguir: \n"
                     + "1. Inicializar aplicacao\n"
                     + "2. Ver hardware da sua maquina\n"
                     + "3. Fechar aplicacao");
-            Integer opcaoEscolhida = leitorOpcao.nextInt();
-
+            
+            String opcao = "";
+            opcao = leitorOpcao.next();
+            
+            while (!opcao.equals("1") && !opcao.equals("2") && !opcao.equals("3")) {
+                System.out.println("\nSelecione entre as tres opcoes validas!");
+                opcao = leitorOpcao.next();
+            }
+            
+            Integer opcaoEscolhida = Integer.valueOf(opcao);
+            
             switch (opcaoEscolhida) {
                 case 1:
-                    System.out.println("\nDigite seu nome de usuario");
+                    System.out.println("\nDigite seu nome de usuario: ");
                     String usuario = leitorString.nextLine();
 
                     System.out.println("\nDigite sua senha: ");
@@ -88,12 +99,10 @@ public class App {
                 case 3:
                     exited = sair();
                     break;
-                default:
-                    System.out.println("\nOpcao invalida");
-                    break;
             }
+            
         } while (!exited);
-
+         
     }
 
     public static void app() throws InterruptedException, UnknownHostException, SocketException {
@@ -102,8 +111,8 @@ public class App {
         // Exportando classe que terá o método de recolha de captura de dados
         
         Boolean exited = false;
-         int delay = 0;   // tempo de espera antes da 1ª execução da tarefa.
-         int interval = 10000;  // intervalo no qual a tarefa será executada.
+        int delay = 0;   // tempo de espera antes da 1ª execução da tarefa.
+        int interval = 10000;  // intervalo no qual a tarefa será executada.
          
         do {
             System.out.println(String.format("\n\n\nBem vindo a aplicacao, %s!\n"
@@ -112,11 +121,11 @@ public class App {
             Integer opcao = leitorOpcao.nextInt();
 
             switch (opcao) {
-                case 1:   
+                case 1:
                     if(verificarSeComputadorEstaCadastrado() == false){
-                        System.out.println("\nMaquina nao esta cadastrada...");
+                        System.out.println("\nMaquina nao esta cadastrada... "
+                                         + "\nVamos realizar o cadastramento.");
                         cadastrarMaquina();
-                        
                     }else{ 
                         exited = true;
                     timer.scheduleAtFixedRate(new TimerTask() {
@@ -149,114 +158,68 @@ public class App {
     }
 
     public static void cadastrarMaquina() throws InterruptedException, UnknownHostException, SocketException {
-       
-            
         if (verificarSeComputadorEstaCadastrado()) {
             System.out.println("\nMáquina ja cadastrada! Realize login.");
         } else {
-            Scanner leitorString = new Scanner(System.in);
-
             //Utilizando o Looca para obter informações do computador
             String enderecoMAC = maquinaCRUD.buscarEndMac();
             String fabricante = maquinaCRUD.buscarFabricante();
             String hostname = maquinaCRUD.buscarHostName();
             Integer arquitetura = maquinaCRUD.buscarArquitetura();
             String SO = maquinaCRUD.buscarSO();
-            // Mudar essa localidade
+            
+            //Adquirindo a localidade
             String localidade = menuLocalidade();
-            // Mudar o hospital
-            String hospitalString = usuarioCRUD.buscarIdHospitalLocal(usuarioLogin).get(0).toString();
-            String resultado = "";
-            resultado = hospitalString.replace("{", "");
-            resultado = resultado.replace("}", "");
-            resultado = resultado.replace("fkHospital=", "");
-            Integer hospital = Integer.parseInt(resultado);
-
-            // Criando instância do objeto máquina 
-            Maquina maquina = new Maquina(hostname, enderecoMAC, fabricante, arquitetura, SO, localidade, hospital);
+            
+            //Adquirindo o id do hospital
+            Integer idHospital = usuarioCRUD.buscarIdHospitalLocal(usuarioLogin);
+            
+            // Criando instância do objeto máquina
+            Maquina maquina = new Maquina(hostname, enderecoMAC, fabricante, arquitetura, 
+                    SO, localidade, idHospital);
 
             System.out.println("\nInicializando cadastro da maquina");
-            Thread.sleep(5000);
+            Thread.sleep(3000);
 
-            maquinaCRUD.incluirNuvem(maquina);
+            //maquinaCRUD.incluirNuvem(maquina);
             maquinaCRUD.incluirLocal(maquina);
-
-            // Inserindo componentes
+            
             //========================COMPONENTES===========================
-            ComponenteCrud componentes = new ComponenteCrud(dataSource);
+            ComponenteCrud componenteCrud = new ComponenteCrud(dataSource);
+            MaquinaCrud maquinaCrud = new MaquinaCrud(dataSource);
+            Cpu cpu = new Cpu();
+            Memory memory = new Memory();
+            Disco disco = new Disco();
             
             //BUSCANDO ID DO COMPUTADOR CADASTRADO
-            List idPcNuvem = componentes.buscarIdComputadorNuvem(hostname);
-            List idPcLocal = componentes.buscarIdComputadorLocal(hostname);
+            Integer idPcLocal = maquinaCrud.buscarIdComputadorLocal(hostname);
             
-            String idMaquinaNuvem = String.valueOf(idPcNuvem);
-            String idMaquinaLocal = String.valueOf(idPcLocal);
+            String processador = cpu.buscarNomeCpu();
+            String memoria = memory.buscarNomeMemoria();
+            String disk = disco.buscarNomeDisco();
             
-            idMaquinaNuvem = idMaquinaNuvem.replace("[{idComputador=", "");
-            idMaquinaNuvem = idMaquinaNuvem.replace("}]", "");
+            Componente processadorPc = new Componente(processador, "CPU", idPcLocal);
+            Componente memoriaPc = new Componente(memoria, "MEMORIA", idPcLocal);
+            Componente discoPc = new Componente(disk, "DISCO", idPcLocal);
             
-            idMaquinaLocal = idMaquinaLocal.replace("[{idComputador=", "");
-            idMaquinaLocal = idMaquinaLocal.replace("}]", "");
-
-            Integer idComputadoresNuvem = Integer.valueOf(idMaquinaNuvem);
-            Integer idComputadoresLocal = Integer.valueOf(idMaquinaLocal);
-
-            String haveCpu = componentes.buscarCpuComponente();
-            String haveMemoria = componentes.buscarMemoriaComponente();
-
-            //INSERINDO CPU na nuvem
-            Componente cpuNuvem = new Componente(haveCpu, idComputadoresNuvem);
-            Componente cpuLocal = new Componente(haveCpu, idComputadoresLocal);
+            //INSERINDO COMPONENTES NO BANCO LOCAL
+            componenteCrud.incluirComponenteLocal(processadorPc);
+            componenteCrud.incluirComponenteLocal(memoriaPc);
+            componenteCrud.incluirComponenteLocal(discoPc);
             
-            // INSERINDO CPU na nuvem
-            componentes.incluirComponenteNuvem(cpuNuvem); //INCLUIR NO BANCO
-            //INSERINDO CPU no local
-            componentes.incluirComponenteLocal(cpuLocal); //INCLUIR NO BANCO
-            
-            
-
-            //INSERINDO MEMÓRIA NA NUVEM
-            if (haveMemoria != null) {
-                Componente memoria = new Componente(haveMemoria, idComputadoresNuvem);
-                componentes.incluirComponenteNuvem(memoria); //INCLUIR NO BANCO
-            } else {
-                System.out.println("Sem memoria");
-            }
-            
-            //INSERINDO MEMÓRIA NO NUVEM
-            if (haveMemoria != null) {
-                Componente memoria = new Componente(haveMemoria, idComputadoresLocal);
-                componentes.incluirComponenteLocal(memoria); //INCLUIR NO BANCO
-            } else {
-                System.out.println("Sem memoria");
-            }
-            
-           
-
-            //INSERINDO DISCOS
-            Integer haveDisco = componentes.buscarVolumesComponente();
-
-            for (int i = 0; i < haveDisco; i++) {
-                Componente disco = new Componente("disco " + (i + 1), idComputadoresNuvem);
-                componentes.incluirComponenteNuvem(disco); //INCLUIR NO BANCO
-            }
-            
-            for (int i = 0; i < haveDisco; i++) {
-                Componente disco = new Componente("disco " + (i + 1), idComputadoresLocal);
-                componentes.incluirComponenteLocal(disco); //INCLUIR NO BANCO
-            }
-
             System.out.println("Maquina cadastrada com sucesso!");
+            
         }
+        
     }
     
     public static Boolean sair() {
         Boolean exited = false;
-
+        
         do {
             Scanner leitorOpcao = new Scanner(System.in);
-            System.out.println("\nVoce tem certeza que deseja encerrar a apli"
-                    + "cacao? \n"
+            System.out.println("\nVoce tem certeza que deseja encerrar a "
+                    + "aplicacao? \n"
                     + "1. Sim\n"
                     + "2. Não");
             Integer opcaoEscolhida = leitorOpcao.nextInt();
@@ -287,20 +250,19 @@ public class App {
         String hostname = maquinaCRUD.buscarHostName();
         ComponenteCrud compCRUD = new ComponenteCrud(dataSource);
         
-        if (compCRUD.buscarIdComputadorNuvem(hostname).size() != 0) {
-            if(compCRUD.buscarIdComputadorLocal(hostname).size() != 0){
+        //if (maquinaCRUD.buscarIdComputadorNuvem(hostname) != 0) {
+            if(maquinaCRUD.buscarIdComputadorLocal(hostname) != 0){
                  return true;
-            }
-           return false;
+            //}
+           //return false;
         } else {
             return false;
         }
         
-        }
+    }
         
     public static Boolean validarLogin(String usuario, String senha) {
         BasicDataSource dataSource = new BasicDataSource();
-
         UsuarioCrud usuarioCRUD = new UsuarioCrud(dataSource);
 
         //CHAMANDO UM MÉTODO PARA VALIDAR O USUÁRIO QUE ESTÁ TENTANDO LOGAR
@@ -338,16 +300,15 @@ public class App {
         Scanner leitorOpcao = new Scanner(System.in);
         Scanner leitorString = new Scanner(System.in);
         
-        
         do {            
-            System.out.println("\nSelecione o seu setor: \n"
-                    + "1. Recepcao\n"
-                    + "2. Triagem\n"
-                    + "3. Ala médica");
+            System.out.println("\nSelecione o seu setor:"
+                    + "\n1. Recepcao"
+                    + "\n2. Triagem"
+                    + "\n3. Ala médica");
             
             Integer opcaoEscolhida = leitorOpcao.nextInt();
             
-            System.out.println("Digite o número do seu andar: ");
+            System.out.println("\nDigite o número do seu andar: ");
             String andar = leitorString.nextLine();
             
             switch (opcaoEscolhida) {
@@ -381,5 +342,5 @@ public class App {
                     maquinaCRUD.buscarSO()));
         
     }
-    */
+    
 }

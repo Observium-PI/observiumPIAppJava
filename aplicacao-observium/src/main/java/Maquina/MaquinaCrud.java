@@ -135,4 +135,57 @@ public class MaquinaCrud {
         
     }
     
+    public Boolean verificarMaquinaNuvem(String hostname) {
+        Boolean hasPc = false;
+        
+        List<Map<String, Object>> buscarPc = conexao.getConexaoNuvem().queryForList(
+                "select idComputador from Computador where hostname = ?", hostname);
+        
+        if (buscarPc.size() != 0) {
+            hasPc = true;
+        }
+        
+        return hasPc;
+    }
+    
+    public Boolean verificarMaquinaLocal(String hostname) {
+        Boolean hasPc = false;
+        
+        List<Map<String, Object>> buscarPc = conexao.getConexaoLocal().queryForList(
+                "select idComputador from Computador where hostname = ?", hostname);
+        
+        if (buscarPc.size() != 0) {
+            hasPc = true;
+        }
+        
+        return hasPc;
+    }
+    
+    public String buscarLocalMaqNuvem(String hostname) {
+        List<Map<String, Object>> local = conexao.getConexaoNuvem().queryForList(
+                "select localidade from Computador where hostname = ?", hostname);
+        
+        Object localPc = local;
+            
+        String localidade = String.valueOf(localPc);
+        localidade = localidade.replace("[{localidade=", "");
+        localidade = localidade.replace("}]", "");
+
+        return localidade;
+            
+    }
+    
+    public String buscarLocalMaqLocal(String hostname) {
+        List<Map<String, Object>> local = conexao.getConexaoLocal().queryForList(
+                "select localidade from Computador where hostname = ?", hostname);
+        
+        Object localPc = local;
+            
+        String localidade = String.valueOf(localPc);
+        localidade = localidade.replace("[{localidade=", "");
+        localidade = localidade.replace("}]", "");
+
+        return localidade;
+    }
+    
 }

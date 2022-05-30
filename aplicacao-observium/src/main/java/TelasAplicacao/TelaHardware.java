@@ -16,6 +16,9 @@ import Componentes.Disco;
 import Componentes.Memory;
 import Usuarios.UsuarioCrud;
 import com.github.britooo.looca.api.group.memoria.Memoria;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 
 /**
  *
@@ -40,6 +43,10 @@ public class TelaHardware extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
         
+        URL url = this.getClass().getResource("/logoIcon.png");
+        Image imagemTitulo = Toolkit.getDefaultToolkit().getImage(url);
+        this.setIconImage(imagemTitulo);
+        
         login = usuario.getLoginUsuario();
         nome = usuario.getUsuario();
         
@@ -48,7 +55,6 @@ public class TelaHardware extends javax.swing.JFrame {
         Cpu cpu = new Cpu();
         Memory memory = new Memory();
         Disco disco = new Disco();
-        Looca looca = new Looca();
         
         //==============================COMPUTADOR==============================
         
@@ -58,6 +64,13 @@ public class TelaHardware extends javax.swing.JFrame {
         String fabricante = computador.buscarFabricante();
         Integer arquitetura = computador.buscarArquitetura();
         String sistemaOperacional = computador.buscarSO();
+        
+        //COLOCANDO A IMAGEM DO SISTEMA OPERACIONAL
+        if (sistemaOperacional.equalsIgnoreCase("windows")) {
+            logoSO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/windows.png")));
+        } else {
+            logoSO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/linux.png")));
+        }
         
         //TRANFERINDO OS DADOS GUARDADOS DO COMPUTADOR PARA AS LABELS NA TELA
         labelHostname.setText("HostName: " + hostName);
@@ -89,6 +102,7 @@ public class TelaHardware extends javax.swing.JFrame {
     private void initComponents() {
 
         bttRetornar = new javax.swing.JButton();
+        logoSO = new javax.swing.JLabel();
         labelHardware = new javax.swing.JLabel();
         labelHostname = new javax.swing.JLabel();
         labelEndMac = new javax.swing.JLabel();
@@ -116,44 +130,45 @@ public class TelaHardware extends javax.swing.JFrame {
             }
         });
         getContentPane().add(bttRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 80, 30));
+        getContentPane().add(logoSO, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, -1, -1));
 
         labelHardware.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         labelHardware.setForeground(new java.awt.Color(255, 255, 255));
         labelHardware.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labelHardware.setText("Hardware:");
         labelHardware.setPreferredSize(new java.awt.Dimension(149, 20));
-        getContentPane().add(labelHardware, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 160, 310, 20));
+        getContentPane().add(labelHardware, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 310, 20));
 
         labelHostname.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelHostname, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 310, 20));
+        getContentPane().add(labelHostname, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 310, 20));
 
         labelEndMac.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelEndMac, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 310, 20));
+        getContentPane().add(labelEndMac, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 310, 20));
 
         labelFabricante.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelFabricante, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 310, 20));
+        getContentPane().add(labelFabricante, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 310, 20));
 
         labelArquitetura.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelArquitetura, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, 310, 20));
+        getContentPane().add(labelArquitetura, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 280, 310, 20));
 
         labelSistemaOperacional.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelSistemaOperacional, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 310, 20));
+        getContentPane().add(labelSistemaOperacional, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 310, 20));
 
         labelComponente.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         labelComponente.setForeground(new java.awt.Color(255, 255, 255));
         labelComponente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labelComponente.setText("Componentes:");
         labelComponente.setPreferredSize(new java.awt.Dimension(149, 20));
-        getContentPane().add(labelComponente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, 310, 20));
+        getContentPane().add(labelComponente, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 350, 310, 20));
 
         labelCpu.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelCpu, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, 310, 20));
+        getContentPane().add(labelCpu, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 310, 20));
 
         labelMemory.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelMemory, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 410, 310, 20));
+        getContentPane().add(labelMemory, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 410, 310, 20));
 
         labelDiscos.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(labelDiscos, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 440, 310, 20));
+        getContentPane().add(labelDiscos, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 440, 310, 20));
 
         logoObservium.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo_Observium_Branco.png"))); // NOI18N
         getContentPane().add(logoObservium, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 310, -1));
@@ -226,5 +241,6 @@ public class TelaHardware extends javax.swing.JFrame {
     private javax.swing.JLabel labelMemory;
     private javax.swing.JLabel labelSistemaOperacional;
     private javax.swing.JLabel logoObservium;
+    private javax.swing.JLabel logoSO;
     // End of variables declaration//GEN-END:variables
 }

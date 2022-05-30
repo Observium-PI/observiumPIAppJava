@@ -95,7 +95,7 @@ public class UsuarioCrud {
         Boolean hasNome = false;
         
         try {
-            List<Map<String, Object>> nameUsuario = conexao.getConexaoLocal().queryForList(
+            List<Map<String, Object>> nameUsuario = conexao.getConexaoNuvem().queryForList(
                       "select login from Usuario where login = ?", nomeUsuario);
             
             if (!nameUsuario.isEmpty()) {
@@ -129,18 +129,32 @@ public class UsuarioCrud {
     
     //MÉTODO PARA BUSCAR O ID DO HOSPITAL DO USUÁRIO LOGADO
     //LEMBRAR DE MUDAR PARA 'conexao.getConexaoNuvem'
-    public List buscarIdHospitalNuvem(String login) {
+    public Integer buscarIdHospitalNuvem(String login) {
         List<Map<String, Object>> buscaIdHospital = conexao.getConexaoNuvem().queryForList(
                   "select fkHospital from Usuario where login = ?", login);
         
-        return buscaIdHospital;
+        Object objetoHospital = buscaIdHospital;
+        String resultado = String.valueOf(objetoHospital);
+        
+        resultado = resultado.replace("[{fkHospital=", "");
+        resultado = resultado.replace("}]", "");
+        Integer hospital = Integer.parseInt(resultado);
+        
+        return hospital;
     }
     
-    public List buscarIdHospitalLocal(String login) {
+    public Integer buscarIdHospitalLocal(String login) {
         List<Map<String, Object>> buscaIdHospital = conexao.getConexaoLocal().queryForList(
                   "select fkHospital from Usuario where login = ?", login);
         
-        return buscaIdHospital;
+        Object objetoHospital = buscaIdHospital;
+        String resultado = String.valueOf(objetoHospital);
+        
+        resultado = resultado.replace("[{fkHospital=", "");
+        resultado = resultado.replace("}]", "");
+        Integer hospital = Integer.parseInt(resultado);
+        
+        return hospital;
     }
 
     public String getUsuario() {
