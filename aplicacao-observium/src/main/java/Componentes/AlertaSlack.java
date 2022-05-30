@@ -149,7 +149,7 @@ public class AlertaSlack {
                 escritor(path, msg);
 
             } else if (sistemaOperacional == "Debian GNU/Linux") {
-                String path = "home/LogPc.txt";
+                String path = "tmp/LogPc.txt";
                 escritor(path, msg);
             }
 
