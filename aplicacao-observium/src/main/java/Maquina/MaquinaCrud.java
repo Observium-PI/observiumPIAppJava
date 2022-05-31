@@ -94,20 +94,26 @@ public class MaquinaCrud {
     
     //MÉTODO PARA BUSCAR O ID DO COMPUTADOR NO BANCO NA NUVEM
     public Integer buscarIdComputadorNuvem(String hostname) {
+        Integer idComputador = 0;
+        
         List<Map<String, Object>> buscarId = conexao.getConexaoNuvem().queryForList(
                 "select idComputador from Computador where hostname = ?", hostname);
         
-        Object id = buscarId;
+        if (buscarId.size() == 0) {
+            return 0;
+        } else {
+            Object id = buscarId;
         
-        //RETIRANDO O QUE NÃO É NECESSÁRIO DA BUSCA NO BANCO DE DADOS E TRANSFORMANDO
-        //EM UM NÚMERO INTEIRO
-        String idComp = String.valueOf(id);
-        idComp = idComp.replace("[{idComputador=", "");
-        idComp = idComp.replace("}]", "");
+            //RETIRANDO O QUE NÃO É NECESSÁRIO DA BUSCA NO BANCO DE DADOS E TRANSFORMANDO
+            //EM UM NÚMERO INTEIRO
+            String idComp = String.valueOf(id);
+            idComp = idComp.replace("[{idComputador=", "");
+            idComp = idComp.replace("}]", "");
+
+            idComputador = Integer.parseInt(idComp.trim());
+        }
         
-        Integer idComponente = Integer.parseInt(idComp.trim());
-        
-        return idComponente;
+        return idComputador;
         
     }
     

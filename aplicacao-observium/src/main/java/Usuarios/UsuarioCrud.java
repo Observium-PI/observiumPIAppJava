@@ -36,66 +36,55 @@ public class UsuarioCrud {
     
     public List inserindoUsuarioNoLocal(String login){
         Boolean temUsuario = hasUsuario(login);
-        List<String> lista = new ArrayList<>();
+        List<String> listaInfoUsu = new ArrayList<>();
         
         if (!temUsuario) {
-            List<Map<String, Object>> buscaId = conexao.getConexaoNuvem().queryForList(
-                  "select idUsuario from Usuario where login = ?", login);
-        
-            String idUsuario = String.valueOf(buscaId);
-            idUsuario = idUsuario.replace("[{idUsuario=", "");
-            idUsuario = idUsuario.replace("}]", "");
-            lista.add(idUsuario);
-
-            List<Map<String, Object>> buscaNome = conexao.getConexaoNuvem().queryForList(
-                      "select nome from Usuario where login = ?", login);
-
-            String nomeUsuario = String.valueOf(buscaNome);
-            nomeUsuario = nomeUsuario.replace("[{nome=", "");
-            nomeUsuario = nomeUsuario.replace("}]", "");
-            lista.add(nomeUsuario);
-
-            List<Map<String, Object>> buscaEmail = conexao.getConexaoNuvem().queryForList(
-                      "select email from Usuario where login = ?", login);
-
-            String emailUsuario = String.valueOf(buscaEmail);
-            emailUsuario = emailUsuario.replace("[{email=", "");
-            emailUsuario = emailUsuario.replace("}]", "");
-            lista.add(emailUsuario);
-
-            List<Map<String, Object>> buscaSetor = conexao.getConexaoNuvem().queryForList(
-                      "select setor from Usuario where login = ?", login);
-
-            String setorUsuario = String.valueOf(buscaSetor);
-            setorUsuario = setorUsuario.replace("[{setor=", "");
-            setorUsuario = setorUsuario.replace("}]", "");
-            lista.add(setorUsuario);
-
-            List<Map<String, Object>> buscaTipoUsuario = conexao.getConexaoNuvem().queryForList(
-                      "select tipoUsuario from Usuario where login = ?", login);
-
-            String tipoUsuario = String.valueOf(buscaTipoUsuario);
-            tipoUsuario = tipoUsuario.replace("[{tipoUsuario=", "");
-            tipoUsuario = tipoUsuario.replace("}]", "");
-            lista.add(tipoUsuario);
-
-            List<Map<String, Object>> buscaFkHospital = conexao.getConexaoNuvem().queryForList(
-                      "select fkHospital from Usuario where login = ?", login);
-
-            String fkHospital = String.valueOf(buscaFkHospital);
+            List<Map<String, Object>> usuEmail = conexao.getConexaoNuvem().queryForList(
+                  "select email from Usuario where login = ?", login);
+            
+            Object email = usuEmail;
+            String emailUsu = String.valueOf(email);
+            emailUsu = emailUsu.replace("[{email=", "");
+            emailUsu = emailUsu.replace("}]", "");
+            
+            List<Map<String, Object>> usuSetor = conexao.getConexaoNuvem().queryForList(
+                  "select setor from Usuario where login = ?", login);
+            
+            Object setor = usuSetor;
+            String setorUsu = String.valueOf(setor);
+            setorUsu = setorUsu.replace("[{setor=", "");
+            setorUsu = setorUsu.replace("}]", "");
+            
+            List<Map<String, Object>> usuTipo = conexao.getConexaoNuvem().queryForList(
+                  "select tipoUsuario from Usuario where login = ?", login);
+            
+            Object tipo = usuTipo;
+            String tipoUsu = String.valueOf(tipo);
+            tipoUsu = tipoUsu.replace("[{tipoUsuario=", "");
+            tipoUsu = tipoUsu.replace("}]", "");
+            
+            List<Map<String, Object>> usuHospital = conexao.getConexaoNuvem().queryForList(
+                  "select fkHospital from Usuario where login = ?", login);
+            
+            Object hospital = usuHospital;
+            String fkHospital = String.valueOf(hospital);
             fkHospital = fkHospital.replace("[{fkHospital=", "");
             fkHospital = fkHospital.replace("}]", "");
-            lista.add(fkHospital);
+            
+            listaInfoUsu.add(emailUsu);
+            listaInfoUsu.add(setorUsu);
+            listaInfoUsu.add(tipoUsu);
+            listaInfoUsu.add(fkHospital);
         }
         
-        return lista;
+        return listaInfoUsu;
     }
     
     public Boolean hasUsuario(String nomeUsuario) {
         Boolean hasNome = false;
         
         try {
-            List<Map<String, Object>> nameUsuario = conexao.getConexaoNuvem().queryForList(
+            List<Map<String, Object>> nameUsuario = conexao.getConexaoLocal().queryForList(
                       "select login from Usuario where login = ?", nomeUsuario);
             
             if (!nameUsuario.isEmpty()) {
