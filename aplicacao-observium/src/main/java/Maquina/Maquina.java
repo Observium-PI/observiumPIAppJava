@@ -11,6 +11,7 @@ public class Maquina {
     }
     
     private String hostName;
+    private String apelidoMaq;
     private String endMac;
     private String fabricante;
     private Integer arquitetura;
@@ -18,8 +19,9 @@ public class Maquina {
     private String localidade;
     private Integer fkHospital;
 
-    public Maquina(String hostName, String endMac, String fabricante, Integer arquitetura, String sistemaOperacional, String localidade, Integer fkHospital) {
+    public Maquina(String hostName, String apelidoMaq, String endMac, String fabricante, Integer arquitetura, String sistemaOperacional, String localidade, Integer fkHospital) {
         this.hostName = hostName;
+        this.apelidoMaq = apelidoMaq;
         this.endMac = endMac;
         this.fabricante = fabricante;
         this.arquitetura = arquitetura;
@@ -42,6 +44,14 @@ public class Maquina {
 
     public void setHostName(String hostName) {
         this.hostName = hostName;
+    }
+
+    public String getApelidoMaq() {
+        return apelidoMaq;
+    }
+
+    public void setApelidoMaq(String apelidoMaq) {
+        this.apelidoMaq = apelidoMaq;
     }
     
     public String getEndMac() {

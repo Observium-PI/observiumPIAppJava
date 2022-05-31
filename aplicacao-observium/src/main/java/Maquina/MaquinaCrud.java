@@ -24,9 +24,10 @@ public class MaquinaCrud {
     
     //METODO PARA INCLUIR APENAS UMA MAQUINA
     public void incluirNuvem(Maquina novaMaquina) {
-        jdbcTemplateNuvem.update("insert into Computador (hostname, endMac, fabricante, "
-                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
+        jdbcTemplateNuvem.update("insert into Computador (hostname, apelidoMaquina, endMAC, fabricante, "
+                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?,?)",
         novaMaquina.getHostName(),
+        novaMaquina.getApelidoMaq(),
         novaMaquina.getEndMac(),
         novaMaquina.getFabricante(),
         novaMaquina.getArquitetura(),
@@ -38,9 +39,10 @@ public class MaquinaCrud {
     
     //MÉTODO PARA INCLUIR APENAS UMA MÁQUINA NO LOCAL
     public void incluirLocal(Maquina novaMaquina){
-        jdbcTemplateLocal.update("insert into Computador (hostname, endMac, fabricante, "
-                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?)",
+        jdbcTemplateLocal.update("insert into Computador (hostname, apelidoMaquina, endMAC, fabricante, "
+                + "arquitetura, sistemaOperacional, localidade, fkHospital) values (?,?,?,?,?,?,?,?)",
         novaMaquina.getHostName(),
+        novaMaquina.getApelidoMaq(),
         novaMaquina.getEndMac(),
         novaMaquina.getFabricante(),
         novaMaquina.getArquitetura(),

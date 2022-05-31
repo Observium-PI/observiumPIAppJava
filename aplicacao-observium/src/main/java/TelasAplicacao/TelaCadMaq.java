@@ -207,6 +207,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
             
             //OBTENDO INFORMAÇÕES DO COMPUTADOR E GUARDANDO EM VARIAVEIS
             String hostName = computador.buscarHostName();
+            String apelidoMaq = hostName;
             String endMac = computador.buscarEndMac();
             String fabricante = computador.buscarFabricante();
             Integer arquitetura = computador.buscarArquitetura();
@@ -239,7 +240,7 @@ public class TelaCadMaq extends javax.swing.JFrame {
             
             try {
                 //INSERINDO COMPUTADOR NO BANCO COM AS INFORMAÇÕES OBTIDAS
-                Maquina maquina = new Maquina(hostName, endMac, fabricante,
+                Maquina maquina = new Maquina(hostName, apelidoMaq, endMac, fabricante,
                     arquitetura, sistemaOperacional, getLocalidade(), fkHospital);
                 
                 if (getHasPcNuvem().equals(false)) {

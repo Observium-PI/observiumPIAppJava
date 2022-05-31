@@ -170,6 +170,7 @@ public class App {
             
             //OBTENDO INFORMAÇÕES DO COMPUTADOR E GUARDANDO EM VARIAVEIS
             String hostName = computador.buscarHostName();
+            String apelidoMaq = hostName;
             String endMac = computador.buscarEndMac();
             String fabricante = computador.buscarFabricante();
             Integer arquitetura = computador.buscarArquitetura();
@@ -185,7 +186,7 @@ public class App {
             
             try {
                 //INSERINDO COMPUTADOR NO BANCO COM AS INFORMAÇÕES OBTIDAS
-                Maquina maquina = new Maquina(hostName, endMac, fabricante,
+                Maquina maquina = new Maquina(hostName, apelidoMaq, endMac, fabricante,
                     arquitetura, sistemaOperacional, localidade, fkHospital);
                 
                 if (existPcNuvem.equals(false)) {
